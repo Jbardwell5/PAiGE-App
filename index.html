@@ -436,19 +436,19 @@
         sendButton.addEventListener('click', (e) => {
             e.preventDefault(); // Prevent any form submission defaults
 
-            // 1. Change to TRANSMITTING state
+            // 1. Change to PAGING state
             sendButton.disabled = true;
             sendButton.classList.remove('active');
-            sendButton.classList.add('transmitting');
-            sendButton.textContent = 'TRANSMITTING...';
+            sendButton.classList.add('paging');
+            sendButton.textContent = 'PAGING...';
 
             // Clear the input box and counter immediately so it feels like the message has been "sent"
             textarea.value = '';
             counter.textContent = '0';
 
-            // 2. After 3 seconds of "transmitting", switch to SENT
+            // 2. After 3 seconds of "paging", switch to SENT
             setTimeout(() => {
-                sendButton.classList.remove('transmitting');
+                sendButton.classList.remove('paging');
                 sendButton.classList.add('sent-success');
                 sendButton.textContent = 'SENT';
 
@@ -458,7 +458,7 @@
                     sendButton.textContent = 'PAGE';
                 }, 1500);
 
-            }, 3000);
+            }, 2900);
         });
     </script>
     
