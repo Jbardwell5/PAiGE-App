@@ -357,31 +357,22 @@
             max-width: 280px;
         }
 
-        /* Map Tracker Card */
-        .tracker-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-
+        /* Map Tracker Container with CSS Grid Pattern */
         .map-container {
             position: relative;
             width: 100%;
             height: 180px; 
             border-radius: 8px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .static-map {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            /* Extra filter to make standard maps match your ultra-stealthy aesthetic */
-            filter: brightness(0.55) contrast(1.25) grayscale(0.45); 
+            border: 1px solid rgba(121, 248, 44, 0.15); /* Subtle green border */
+            
+            /* Pure CSS Tactical Grid Pattern */
+            background-color: #0d1109; /* Dark olive-black background */
+            background-image: 
+                linear-gradient(rgba(121, 248, 44, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(121, 248, 44, 0.08) 1px, transparent 1px);
+            background-size: 20px 20px; /* Grid block size */
+            background-position: center;
         }
 
         /* Pulsing Radar Tracker Dot */
@@ -465,8 +456,6 @@
        <div class="tracker-card">
             <div class="section-header">Location Tracking</div>
             <div class="map-container" style="margin-top: 10px;">
-                <img class="static-map" src="https://upload.wikimedia.org/wikipedia/commons/2/23/Street_grid_rect.svg" alt="Manhattan Grid Map">
-                
                 <div class="tracker-dot"></div>
             </div>
         </div>
