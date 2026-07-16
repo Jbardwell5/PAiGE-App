@@ -62,11 +62,12 @@
             margin-bottom: 10px; /* Adds extra breathing room before the larger logo */
         }
         
-       /* Simplified Status Indicator */
+      /* Simplified Status Indicator */
         .status-container {
-            position: relative;
+            position: absolute;
             top: 24px;
-            right: 20px;
+            right: 20px; /* Forces it to the right */
+            left: auto;  /* Overrides any leftover left positioning */
             user-select: none;
             /* Simple 8-second gentle pulse for the whole indicator */
             animation: statusPulse 8s infinite ease-in-out; 
