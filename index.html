@@ -439,7 +439,7 @@
             textarea.value = '';
             counter.textContent = '0';
 
-            // 2. After 2 seconds of "transmitting", switch to SENT
+            // 2. After 3 seconds of "transmitting", switch to SENT
             setTimeout(() => {
                 sendButton.classList.remove('transmitting');
                 sendButton.classList.add('sent-success');
