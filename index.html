@@ -64,7 +64,9 @@
         
       /* Simplified Status Indicator */
         .status-container {
-            position: absolute;
+            position: relative; /* This is the anchor for the status indicator */
+            /* ... your other container styles ... */
+        }
             top: 24px;
             right: 20px; /* Forces it to the right */
             left: auto;  /* Overrides any leftover left positioning */
