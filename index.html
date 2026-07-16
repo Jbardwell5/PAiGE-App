@@ -182,20 +182,24 @@
         .btn-send {
             background: transparent;
             border: 1px solid var(--border-color);
-            color: var(--text-dim);
-            padding: 8px 24px;
-            border-radius: 4px;
+            color: rgba(121, 248, 44, 0.25); /* Dimmed green when empty */
+            padding: 8px 16px;
             font-family: inherit;
             font-size: 14px;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.2s;
+            font-weight: bold;
+            cursor: not-allowed; /* Shows a "no" cursor on desktop when empty */
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            opacity: 0.5; /* Slightly faded out */
         }
 
-        .btn-send:active {
-            background: rgba(121, 248, 44, 0.1);
-            border-color: var(--glow-green);
-            color: var(--glow-green);
+        /* The glowing style that gets triggered when there is text */
+        .btn-send.active {
+            color: var(--primary-glow); /* Bright, glowing green text */
+            border-color: var(--primary-glow); /* Glowing green border */
+            box-shadow: 0 0 8px rgba(121, 248, 44, 0.3); /* Subtle green outer glow */
+            cursor: pointer;
+            opacity: 1; /* Fully visible */
         }
 
         .shortcut-hint {
@@ -344,12 +348,28 @@
 
     </div>
 
-    <script>
+  <script>
         const textarea = document.getElementById('message-input');
         const counter = document.getElementById('char-counter');
+        const sendButton = document.querySelector('.btn-send');
+
+        // Set initial state of the button to disabled since the textarea is empty
+        sendButton.disabled = true;
 
         textarea.addEventListener('input', () => {
-            counter.textContent = textarea.value.length;
+            const currentLength = textarea.value.length;
+            
+            // 1. Keeps your character counter working perfectly
+            counter.textContent = currentLength;
+
+            // 2. Toggles the glowing green style and enables/disables the button
+            if (currentLength > 0) {
+                sendButton.classList.add('active');
+                sendButton.disabled = false;
+            } else {
+                sendButton.classList.remove('active');
+                sendButton.disabled = true;
+            }
         });
     </script>
 </body>
