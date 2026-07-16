@@ -62,66 +62,30 @@
             margin-bottom: 10px; /* Adds extra breathing room before the larger logo */
         }
         
-        /* Signal Status Indicator */
+       /* Simplified Status Indicator */
         .status-container {
-            position: relative;
-            top: 20px;
+            position: absolute;
+            top: 24px;
             right: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            font-family: 'Share Tech Mono', monospace;
-            gap: 2px;
             user-select: none;
-        }
-
-        .signal-label {
-            font-size: 9px;
-            color: var(--text-dim);
-            letter-spacing: 1px;
-        }
-
-        .signal-bars {
-            display: flex;
-            align-items: flex-end;
-            gap: 2px;
-            height: 12px;
-            margin: 2px 0;
-        }
-
-        .bar {
-            width: 3px;
-            background-color: rgba(121, 248, 44, 0.15); /* Dim/inactive bars */
-            border-radius: 1px;
-            transition: background-color 0.3s ease;
-        }
-
-        /* Heights for the 5 signal bars */
-        .bar-1 { height: 20%; }
-        .bar-2 { height: 40%; }
-        .bar-3 { height: 60%; }
-        .bar-4 { height: 80%; }
-        .bar-5 { height: 100%; }
-
-        /* Glowing state for active signal */
-        .bar.active {
-            background-color: var(--primary-glow);
-            box-shadow: 0 0 4px rgba(121, 248, 44, 0.4);
+            /* Simple 8-second gentle pulse for the whole indicator */
+            animation: statusPulse 8s infinite ease-in-out; 
         }
 
         .status-text {
-            font-size: 10px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
             color: var(--primary-glow);
             font-weight: bold;
             letter-spacing: 1.5px;
             text-shadow: 0 0 5px rgba(121, 248, 44, 0.5);
-            animation: pulse 2s infinite alternate;
         }
 
-        @keyframes pulse {
-            0% { opacity: 0.6; }
-            100% { opacity: 1; }
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
         }
+        
         .logo-image {
             height: 125px; /* Making the logo larger */
             width: auto;  /* Prevents any horizontal stretching */
@@ -365,16 +329,7 @@
 <body>
 
     <div class="app-container">
-        <!-- Device Status Indicator -->
-        <div class="status-container">
-            <span class="signal-label">SIGNAL</span>
-            <div class="signal-bars">
-                <div class="bar bar-1 active"></div>
-                <div class="bar bar-2 active"></div>
-                <div class="bar bar-3 active"></div>
-                <div class="bar bar-4 active"></div>
-                <div class="bar bar-5 active"></div>
-            </div>
+       <div class="status-container">
             <span class="status-text">● ONLINE</span>
         </div>
         
