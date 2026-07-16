@@ -225,7 +225,30 @@
             cursor: pointer;
             opacity: 1; /* Fully visible */
         }
+        
+        /* Transmitting State (Pulsing text) */
+        .btn-send.transmitting {
+            color: var(--primary-glow);
+            border-color: var(--primary-glow);
+            animation: transmitPulse 0.5s infinite alternate;
+            cursor: wait;
+        }
 
+        @keyframes transmitPulse {
+            0% { opacity: 0.4; }
+            100% { opacity: 1; box-shadow: 0 0 10px rgba(121, 248, 44, 0.4); }
+        }
+
+        /* Sent Success State (Solid bright glow) */
+        .btn-send.sent-success {
+            color: #ffffff;
+            background-color: var(--primary-glow);
+            border-color: var(--primary-glow);
+            box-shadow: 0 0 15px rgba(121, 248, 44, 0.8);
+            text-shadow: none;
+            opacity: 1;
+        }
+        
         .shortcut-hint {
             text-align: center;
             font-size: 11px;
@@ -376,29 +399,61 @@
     </div>
 
   <script>
+    <script>
         const textarea = document.getElementById('message-input');
         const counter = document.getElementById('char-counter');
         const sendButton = document.querySelector('.btn-send');
 
-        // Set initial state of the button to disabled since the textarea is empty
+        // Set initial state of the button
         sendButton.disabled = true;
 
+        // Monitor character count and toggle button active state
         textarea.addEventListener('input', () => {
             const currentLength = textarea.value.length;
-            
-            // 1. Keeps your character counter working perfectly
             counter.textContent = currentLength;
 
-            // 2. Toggles the glowing green style and enables/disables the button
-            if (currentLength > 0) {
-                sendButton.classList.add('active');
-                sendButton.disabled = false;
-            } else {
-                sendButton.classList.remove('active');
-                sendButton.disabled = true;
+            // Only toggle if we aren't currently sending a message
+            if (!sendButton.classList.contains('transmitting') && !sendButton.classList.contains('sent-success')) {
+                if (currentLength > 0) {
+                    sendButton.classList.add('active');
+                    sendButton.disabled = false;
+                } else {
+                    sendButton.classList.remove('active');
+                    sendButton.disabled = true;
+                }
             }
         });
+
+        // The Sending Action Sequence
+        sendButton.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent any form submission defaults
+
+            // 1. Change to TRANSMITTING state
+            sendButton.disabled = true;
+            sendButton.classList.remove('active');
+            sendButton.classList.add('transmitting');
+            sendButton.textContent = 'TRANSMITTING...';
+
+            // Clear the input box and counter immediately so it feels like the message has been "sent"
+            textarea.value = '';
+            counter.textContent = '0';
+
+            // 2. After 1.5 seconds of "transmitting", switch to SENT
+            setTimeout(() => {
+                sendButton.classList.remove('transmitting');
+                sendButton.classList.add('sent-success');
+                sendButton.textContent = 'SENT';
+
+                // 3. After 1 more second, reset back to the default empty PAGE state
+                setTimeout(() => {
+                    sendButton.classList.remove('sent-success');
+                    sendButton.textContent = 'PAGE';
+                }, 1000);
+
+            }, 1500);
+        });
     </script>
+    
 </body>
 </html>
  
