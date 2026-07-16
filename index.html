@@ -446,7 +446,7 @@
             textarea.value = '';
             counter.textContent = '0';
 
-            // 2. After 5 seconds of "transmitting", switch to SENT
+            // 2. After 3 seconds of "transmitting", switch to SENT
             setTimeout(() => {
                 sendButton.classList.remove('transmitting');
                 sendButton.classList.add('sent-success');
@@ -456,9 +456,9 @@
                 setTimeout(() => {
                     sendButton.classList.remove('sent-success');
                     sendButton.textContent = 'PAGE';
-                }, 1000);
+                }, 1500);
 
-            }, 1500);
+            }, 3000);
         });
     </script>
     
