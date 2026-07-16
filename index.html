@@ -251,12 +251,19 @@
             opacity: 1;
         }
         
-        .shortcut-hint {
+       .shortcut-hint {
             text-align: center;
             font-size: 11px;
             color: var(--text-dim);
             letter-spacing: 1px;
             margin-top: -8px;
+        }
+
+        /* Hide the shortcut hint on mobile devices */
+        @media (max-width: 480px) {
+            .shortcut-hint {
+                display: none;
+            }
         }
 
         /* Transmission Log Header */
