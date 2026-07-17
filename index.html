@@ -4,14 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PAiGE</title>
-    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="PAiGE">
-
-    <link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
@@ -23,605 +17,97 @@
             --text-bright: #9efb61;
             --alert-red: #ff3b30;
         }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { background-color: var(--bg-color); color: var(--text-bright); font-family: 'Share Tech Mono', monospace; padding: 16px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .app-container { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 20px; padding-bottom: 40px; }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
+        /* Logo & Status */
+        .status-container { position: absolute; top: 15px; right: 20px; font-size: 11px; color: var(--glow-green); opacity: 0.6; }
+        .logo-image { height: 125px; width: auto; display: block; margin: 0 auto; }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-bright);
-            font-family: 'Share Tech Mono', 'Source Code Pro', monospace;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            overflow-y: auto;
-        }
+        /* Input Styling */
+        .input-card { border: 1px solid var(--border-color); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+        textarea { width: 100%; min-height: 80px; background: transparent; border: none; color: #fff; font-family: inherit; font-size: 14px; resize: none; outline: none; }
+        .char-count { font-size: 10px; color: var(--text-dim); text-align: right; }
 
-        /* Container designed to fit mobile viewport */
-        .app-container {
-            width: 100%;
-            max-width: 400px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            padding-bottom: 40px; /* Space at bottom for home indicator */
-        }
+        /* Controls & Buttons */
+        .controls { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 12px; }
+        .btn-send { background: transparent; border: 1px solid var(--border-color); color: rgba(121, 248, 44, 0.25); padding: 8px 16px; font-family: inherit; font-size: 14px; font-weight: bold; cursor: not-allowed; border-radius: 4px; transition: 0.2s; }
+        .btn-send.active { color: var(--text-bright); border-color: var(--glow-green); cursor: pointer; }
+        .btn-send.paging { animation: transmitPulse 0.5s infinite alternate; }
+        .btn-send.sent-success { color: #000; background-color: var(--glow-green); border-color: var(--glow-green); }
 
-        /* Header / Logo */
-        header {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px 0;
-            margin-bottom: 10px; /* Adds extra breathing room before the larger logo */
-        }
-        
-      /* Simplified Status Indicator */
-        .status-container {
-            position: absolute; /* This is the anchor for the status indicator */
-            /* ... your other container styles ... */
-            top: 3px;
-            right: 12px; /* Forces it to the right */
-            left: auto;  /* Overrides any leftover left positioning */
-            user-select: none;
-            /* Simple 8-second gentle pulse for the whole indicator */
-            animation: statusPulse 8s infinite ease-in-out; 
-        }
+        /* History & Map */
+        .section-header { font-size: 12px; color: var(--text-dim); border-bottom: 1px solid var(--border-color); padding-bottom: 6px; text-transform: uppercase; margin-top: 10px; }
+        .message-card { border: 1px solid var(--border-color); border-radius: 8px; padding: 12px; color: #e0e0e0; font-size: 14px; }
+        .message-card .timestamp { font-size: 8px; color: var(--glow-green); margin-bottom: 4px; display: block; }
+        .map-container { position: relative; width: 100%; height: 180px; border-radius: 8px; overflow: hidden; background-color: #0f120d; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; }
+        .vector-map { width: 110%; height: 110%; opacity: 0.65; }
+        .map-land { fill: rgba(255, 255, 255, 0.04); stroke: rgba(121, 248, 44, 0.2); }
+        .friend-tracker-dot { position: absolute; top: 48%; left: 48%; width: 6px; height: 6px; background-color: var(--glow-green); border-radius: 50%; box-shadow: 0 0 8px var(--glow-green); }
 
-        .status-text {
-            font-family: 'Share Tech Mono', monospace;
-            font-size: 11px;
-            color: var(--primary-glow);
-            font-weight: bold;
-            letter-spacing: 1.5px;
-            text-shadow: 0 0 5px rgba(121, 248, 44, 0.5);
-        }
-
-        @keyframes statusPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-        
-        .logo-image {
-            height: 125px; /* Making the logo larger */
-            width: auto;  /* Prevents any horizontal stretching */
-            display: block;
-        }
-
-       /* 1. The Main Input Container */
-.input-card {
-    background: #141911 !important; 
-    border: 1px solid var(--border-color);
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-/* 2. The Textarea inside the Input */
-.input-card textarea {
-    width: 100%;
-    min-height: 80px;
-    background: transparent;
-    border: none;
-    color: #fff;
-    font-family: 'Courier New', monospace; /* Keeping your PAiGE terminal vibe */
-    font-size: 14px;
-    resize: none;
-    outline: none;
-    margin-bottom: 10px;
-}
-
-/* 3. The Send Button */
-.send-btn {
-    background: var(--glow-green);
-    color: #000;
-    border: none;
-    padding: 8px;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 4px;
-    margin-top: 5px;
-}
-
-/* 4. The History Container (The "Recent Pages" log) */
-.recent-pages {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-/* 5. The Individual Message Cards (Styled to match the input) */
-.message-card {
-    background: #141911 !important;
-    border: 1px solid rgba(121, 248, 44, 0.2);
-    padding: 12px;
-    border-radius: 4px;
-    color: #e0e0e0;
-    font-family: monospace;
-}
-
-.message-card .timestamp {
-    font-size: 8px;
-    color: var(--glow-green);
-    text-transform: uppercase;
-    margin-bottom: 4px;
-    display: block;
-}
-
-        /* Controls: Toggle & Send Button */
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid var(--border-color);
-            padding-top: 12px;
-        }
-
-        /* Urgency Toggle Switch */
-        .toggle-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 44px;
-            height: 22px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(39, 49, 27, 0.4);
-            border: 1px solid var(--border-color);
-            transition: .3s;
-            border-radius: 24px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 14px;
-            width: 14px;
-            left: 3px;
-            bottom: 3px;
-            background-color: var(--text-dim);
-            transition: .3s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: rgba(121, 248, 44, 0.2);
-            border-color: var(--glow-green);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(22px);
-            background-color: var(--glow-green);
-            box-shadow: 0 0 8px var(--glow-green);
-        }
-
-        .toggle-label {
-            font-size: 13px;
-            letter-spacing: 1px;
-            color: var(--text-dim);
-            transition: color 0.3s;
-        }
-
-        input:checked ~ .toggle-label {
-            color: var(--glow-green);
-        }
-
-        /* Send Button */
-        .btn-send {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: rgba(121, 248, 44, 0.25); /* Dimmed green when empty */
-            padding: 8px 16px;
-            font-family: inherit;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: not-allowed; /* Shows a "no" cursor on desktop when empty */
-            border-radius: 4px;
-            transition: background-color 0.1s ease, border-color 0.1s ease, box-shadow 0.1s ease, color 0.1s;
-            opacity: 0.5; /* Slightly faded out */
-        }
-
-        /* The glowing style that gets triggered when there is text */
-        .btn-send.active {
-            color: var(--primary-glow); /* Bright, glowing green text */
-            border-color: var(--glow-green); /* Glowing green border */
-            box-shadow: 0 0 8px rgba(121, 248, 44, 0.3); /* Subtle green outer glow */
-            cursor: pointer;
-            opacity: 1; /* Fully visible */
-        }
-        
-        /* Transmitting State (Pulsing text) */
-        .btn-send.paging {
-            color: var(--glow-green);
-            border-color: var(--primary-glow);
-            animation: transmitPulse 0.5s infinite alternate;
-            cursor: wait;
-        }
-
-        @keyframes transmitPulse {
-            0% { opacity: 0.4; }
-            100% { opacity: 1; box-shadow: 0 0 10px rgba(121, 248, 44, 0.4); }
-        }
-
-        /* Sent Success State (Solid bright glow) */
-        .btn-send.sent-success {
-            color: #ffffff;
-            background-color: var(--primary-glow);
-            border-color: var(--primary-glow);
-            box-shadow: 0 0 15px rgba(121, 248, 44, 0.8);
-            text-shadow: none;
-            opacity: 1;
-        }
-        
-       .shortcut-hint {
-            text-align: center;
-            font-size: 11px;
-            color: var(--text-dim);
-            letter-spacing: 1px;
-            margin-top: -8px;
-        }
-
-        /* Hide the shortcut hint on mobile devices */
-        @media (max-width: 480px) {
-            .shortcut-hint {
-                display: none;
-            }
-        }
-
-        /* Transmission Log Header */
-        .section-header {
-            font-size: 12px;
-            color: var(--text-dim);
-            letter-spacing: 1px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 6px;
-            text-transform: uppercase;
-        }
-
-        /* Message Bubble Card */
-        .log-card {
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .log-timestamp {
-            font-size: 11px;
-            color: var(--text-dim);
-            text-align: right;
-        }
-
-        .log-text {
-            color: var(--text-bright);
-            font-size: 15px;
-            line-height: 1.4;
-        }
-
-        /* Location Tracking Card */
-        .location-card {
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 40px; /* Push the access denied text down */
-        }
-
-        .location-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .location-title {
-            font-size: 13px;
-            letter-spacing: 1px;
-            color: var(--text-bright);
-        }
-
-        .btn-enable {
-            background: transparent;
-            border: 1px solid var(--border-color);
-            color: var(--glow-green);
-            padding: 4px 14px;
-            border-radius: 4px;
-            font-family: inherit;
-            font-size: 11px;
-            letter-spacing: 1px;
-            cursor: pointer;
-        }
-
-        /* Access Denied Warning */
-        .error-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            gap: 8px;
-            padding: 20px 0;
-        }
-
-        .error-title {
-            color: var(--alert-red);
-            font-size: 13px;
-            letter-spacing: 1px;
-            font-weight: bold;
-        }
-
-        .error-desc {
-            color: #8c443e;
-            font-size: 11px;
-            line-height: 1.4;
-            max-width: 280px;
-        }
-
-     /* Map Container Base */
-        .map-container {
-            position: relative;
-            width: 100%;
-            height: 180px; 
-            border-radius: 8px;
-            overflow: hidden;
-            background-color: #0f120d; /* Deep olive-black background */
-            border: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* SVG Map Styling */
-        .vector-map {
-            width: 110%;
-            height: 110%;
-            object-fit: cover;
-            opacity: 0.65;
-        }
-
-        /* Stylized Landmass (Soft dark tint) */
-        .map-land {
-            fill: rgba(255, 255, 255, 0.04);
-            stroke: rgba(121, 248, 44, 0.2);
-            stroke-width: 0.8;
-        }
-
-        /* Central Park (Recognizable dark rectangle cutout) */
-        .map-park {
-            fill: #0f120d;
-            stroke: rgba(121, 248, 44, 0.15);
-            stroke-width: 0.5;
-        }
-
-        /* Surrounding Coastlines & Grids */
-        .map-coast {
-            fill: none;
-            stroke: rgba(121, 248, 44, 0.1);
-            stroke-width: 0.8;
-        }
-        .map-grid-line {
-            stroke: rgba(121, 248, 44, 0.05);
-            stroke-width: 0.5;
-        }
-
-        /* High-Fidelity "Blip" Tracker Dot */
-        .friend-tracker-dot {
-            position: absolute;
-            top: 48%; /* Positioned directly on the Manhattan landmass */
-            left: 48%;
-            transform: translate(-50%, -50%);
-            width: 6px; 
-            height: 6px;
-            background-color: var(--glow-green);
-            border-radius: 50%;
-            box-shadow: 0 0 8px var(--glow-green);
-            z-index: 10;
-        }
-
-        .friend-tracker-dot::after {
-            content: '';
-            position: absolute;
-            top: -12px;
-            left: -12px;
-            width: 30px;
-            height: 30px;
-            border: 1px solid var(--glow-green);
-            border-radius: 50%;
-            opacity: 0;
-            animation: digitalBlip 1.2s infinite linear;
-        }
-
-        @keyframes digitalBlip {
-            0% { transform: scale(0.1); opacity: 1; }
-            100% { transform: scale(1.0); opacity: 0; }
-        }
-        }
+        @keyframes transmitPulse { 0% { opacity: 0.4; } 100% { opacity: 1; box-shadow: 0 0 10px var(--glow-green); } }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-       <div class="status-container">
-            <span class="status-text">● ONLINE</span>
-        </div>
-        
-      <header>
-            <img src="apple-touch-logo.png" alt="PAiGE Logo" class="logo-image">
-        </header>
+        <div class="status-container">● ONLINE</div>
+        <header><img src="apple-touch-logo.png" alt="PAiGE Logo" class="logo-image"></header>
 
-       <div class="input-card">
-    <textarea placeholder="COMPOSE..." maxlength="160" id="message-input" oninput="updateCounter()"></textarea>
-    <div class="char-count"><span id="char-counter">0</span> / 160</div>
-    <button class="send-btn" onclick="sendMessage()">SEND</button>
-</div>
-
-<!-- History sits outside the input card to prevent layout bugs -->
-<div id="recentPagesContainer" class="recent-pages">
-    <!-- Messages appear here -->
-</div>
-            
+        <!-- Messaging Input -->
+        <div class="input-card">
+            <textarea placeholder="COMPOSE..." maxlength="160" id="message-input"></textarea>
+            <div class="char-count"><span id="char-counter">0</span> / 160</div>
             <div class="controls">
-                <label class="toggle-container">
-                    <span class="switch">
-                        <input type="checkbox" id="urgency-toggle" checked>
-                        <span class="slider"></span>
-                    </span>
-                    <span class="toggle-label">PRIORITY</span>
-                </label>
-                <button class="btn-send">PAGE</button>
+                <span class="toggle-label" style="color: var(--text-dim); font-size: 12px;">PRIORITY</span>
+                <button class="btn-send" id="send-btn">PAGE</button>
             </div>
         </div>
 
-        <div class="shortcut-hint">⌘ + ENTER TO SEND</div>
+        <div id="recentPagesContainer"></div>
 
-        <div class="section-header">recent pages</div>
-        <div class="log-card">
-            <div class="log-timestamp">Jul 16, 2026 10:47 AM</div>
-            <div class="log-text">Hi, When will you be home?</div>
+        <div class="section-header">Location Tracking</div>
+        <div class="map-container">
+            <svg class="vector-map" viewBox="0 0 200 120"><path d="M20,95 Q35,70 65,55 T120,35 T160,25 L165,28 Q140,42 110,58 T60,82 T15,102 Z" class="map-land" /></svg>
+            <div class="friend-tracker-dot"></div>
         </div>
+    </div>
 
-      <!-- Pager Location Tracker - Local SVG Manhattan Grid -->
-        <div class="tracker-card">
-            <div class="section-header">Location Tracking</div>
-            <div class="map-container" style="margin-top: 10px;">
-                
-                <!-- Pure Local SVG Vector Map (No Internet Required) -->
-                <svg class="vector-map" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Manhattan Landmass -->
-                    <path d="M20,95 Q35,70 65,55 T120,35 T160,25 L165,28 Q140,42 110,58 T60,82 T15,102 Z" class="map-land" />
-                    <!-- Central Park Landmark -->
-                    <rect x="85" y="44" width="25" height="6" transform="rotate(-22, 85, 44)" class="map-park" />
-                    <!-- Long Island / Queens Coastline -->
-                    <path d="M40,115 Q80,95 130,80 T190,70" class="map-coast" />
-                    <!-- Abstract Regional Grid Lines -->
-                    <line x1="30" y1="120" x2="180" y2="20" class="map-grid-line" stroke-dasharray="2,4" />
-                    <line x1="10" y1="90" x2="160" y2="0" class="map-grid-line" stroke-dasharray="2,4" />
-                </svg>
-                
-                <!-- The Tiny, Steady Digital Blip -->
-                <div class="friend-tracker-dot"></div>
-            </div>
-        </div>
-
-  <script>
-        const textarea = document.getElementById('message-input');
+    <script>
+        const input = document.getElementById('message-input');
         const counter = document.getElementById('char-counter');
-        const sendButton = document.querySelector('.btn-send');
+        const btn = document.getElementById('send-btn');
+        const container = document.getElementById('recentPagesContainer');
 
-        // Set initial state of the button
-        sendButton.disabled = true;
-
-        // Monitor character count and toggle button active state
-        textarea.addEventListener('input', () => {
-            const currentLength = textarea.value.length;
-            counter.textContent = currentLength;
-
-            // Only toggle if we aren't currently sending a message
-            if (!sendButton.classList.contains('transmitting') && !sendButton.classList.contains('sent-success')) {
-                if (currentLength > 0) {
-                    sendButton.classList.add('active');
-                    sendButton.disabled = false;
-                } else {
-                    sendButton.classList.remove('active');
-                    sendButton.disabled = true;
-                }
-            }
+        input.addEventListener('input', () => {
+            counter.textContent = input.value.length;
+            btn.classList.toggle('active', input.value.length > 0);
         });
 
-        // The Sending Action Sequence
-        sendButton.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent any form submission defaults
+        btn.addEventListener('click', () => {
+            if (!input.value) return;
+            
+            // UI Paging Animation
+            btn.disabled = true;
+            btn.classList.replace('active', 'paging');
+            btn.textContent = 'PAGING...';
 
-            // 1. Change to PAGING state
-            sendButton.disabled = true;
-            sendButton.classList.remove('active');
-            sendButton.classList.add('paging');
-            sendButton.textContent = 'PAGING...';
+            // Create History Card
+            const div = document.createElement('div');
+            div.className = 'message-card';
+            div.style.marginTop = '10px';
+            div.innerHTML = `<span class="timestamp">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>${input.value}`;
+            container.prepend(div);
 
-            // Clear the input box and counter immediately so it feels like the message has been "sent"
-            textarea.value = '';
-            counter.textContent = '0';
-
-            // 2. After 3 seconds of "paging", switch to SENT
             setTimeout(() => {
-                sendButton.classList.remove('paging');
-                sendButton.classList.add('sent-success');
-                sendButton.textContent = 'SENT';
-
-                // 3. After 1.5 more second, reset back to the default empty PAGE state
-                setTimeout(() => {
-                    sendButton.classList.remove('sent-success');
-                    sendButton.textContent = 'PAGE';
-                }, 1500);
-
-            }, 3000);
+                btn.classList.replace('paging', 'sent-success');
+                btn.textContent = 'SENT';
+                input.value = '';
+                counter.textContent = '0';
+                setTimeout(() => { btn.textContent = 'PAGE'; btn.classList.remove('sent-success'); btn.disabled = false; }, 1500);
+            }, 2000);
         });
     </script>
-// Live character counter
-function updateCounter() {
-    const input = document.getElementById('message-input');
-    const counter = document.getElementById('char-counter');
-    counter.textContent = input.value.length;
-}
-
-function sendMessage() {
-    const input = document.getElementById('message-input');
-    const container = document.getElementById('recentPagesContainer');
-    
-    if (input.value.trim() === "") return;
-
-    // Create the message element
-    const msgDiv = document.createElement('div');
-    msgDiv.className = 'message-card'; // Add this to your CSS for styling
-    msgDiv.innerHTML = `
-        <div class="timestamp">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
-        <div class="content">${input.value}</div>
-    `;
-
-    // Add to the top
-    container.prepend(msgDiv);
-
-    // Save to LocalStorage
-    const history = JSON.parse(localStorage.getItem('paigeHistory') || "[]");
-    history.unshift({ text: input.value, time: new Date().toLocaleTimeString() });
-    localStorage.setItem('paigeHistory', JSON.stringify(history.slice(0, 5)));
-
-    // Clear and reset counter
-    input.value = '';
-    document.getElementById('char-counter').textContent = '0';
-}
-</script>
-    
 </body>
 </html>
- 
