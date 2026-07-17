@@ -425,6 +425,14 @@
         <div class="input-card">
             <textarea placeholder="COMPOSE..." maxlength="160" id="message-input"></textarea>
             <div class="char-count"><span id="char-counter">0</span> / 160</div>
+            <!-- Input area -->
+            <input type="text" id="messageInput" placeholder="Type a message...">
+            <button onclick="sendMessage()">Send</button>
+
+            <!-- History area -->
+            <div id="recentPagesContainer" class="recent-pages">
+            <!-- Messages will appear here automatically -->
+         </div>
             
             <div class="controls">
                 <label class="toggle-container">
@@ -515,6 +523,40 @@
             }, 3000);
         });
     </script>
+// Live character counter
+function updateCounter() {
+    const input = document.getElementById('message-input');
+    const counter = document.getElementById('char-counter');
+    counter.textContent = input.value.length;
+}
+
+function sendMessage() {
+    const input = document.getElementById('message-input');
+    const container = document.getElementById('recentPagesContainer');
+    
+    if (input.value.trim() === "") return;
+
+    // Create the message element
+    const msgDiv = document.createElement('div');
+    msgDiv.className = 'message-card'; // Add this to your CSS for styling
+    msgDiv.innerHTML = `
+        <div class="timestamp">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+        <div class="content">${input.value}</div>
+    `;
+
+    // Add to the top
+    container.prepend(msgDiv);
+
+    // Save to LocalStorage
+    const history = JSON.parse(localStorage.getItem('paigeHistory') || "[]");
+    history.unshift({ text: input.value, time: new Date().toLocaleTimeString() });
+    localStorage.setItem('paigeHistory', JSON.stringify(history.slice(0, 5)));
+
+    // Clear and reset counter
+    input.value = '';
+    document.getElementById('char-counter').textContent = '0';
+}
+</script>
     
 </body>
 </html>
