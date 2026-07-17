@@ -357,90 +357,62 @@
             max-width: 280px;
         }
 
-      /* Map Container: Clean & Dark */
+      /* Map Container: Macro/Regional View */
         .map-container {
             position: relative;
             width: 100%;
             height: 180px; 
             border-radius: 8px;
             overflow: hidden;
-            background-color: #141911; /* Deep, muted olive-black */
+            background-color: #0f120d; /* Slightly darker to emphasize the map data */
             border: 1px solid var(--border-color);
         }
 
-        /* Abstract Minimalist City Blocks - Zoomed Out Macro View */
+        /* Tiny, dense blocks for a "Zoomed Out" feel */
         .map-block {
             position: absolute;
-            background: rgba(255, 255, 255, 0.03); /* Soft, structural block color */
-            border-radius: 2px; /* Sharper corners for smaller blocks */
-            border: 1px solid rgba(255, 255, 255, 0.01);
+            background: rgba(255, 255, 255, 0.02); 
+            border-radius: 1px;
         }
         
-        /* A dense grid array representing a macro city layout */
-        .block-1 { top: 15px; left: 15px; width: 25%; height: 45px; }
-        .block-2 { top: 15px; left: 45%; width: 50%; height: 45px; }
-        .block-3 { top: 75px; left: 15px; width: 35%; height: 35px; }
-        .block-4 { top: 75px; left: 55%; width: 40%; height: 35px; }
-        
-        /* Adding a couple extra background blocks to fill out the macro grid */
-        .map-container::before {
-            content: '';
-            position: absolute;
-            bottom: 15px; left: 15px; width: 50%; height: 40px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 2px;
-        }
-        .map-container::after {
-            content: '';
-            position: absolute;
-            bottom: 15px; right: 15px; width: 25%; height: 40px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 2px;
-        }
+        /* Regional Grid Pattern */
+        .block-1 { top: 10px; left: 10px; width: 15%; height: 30px; }
+        .block-2 { top: 10px; left: 30%; width: 25%; height: 50px; }
+        .block-3 { top: 10px; right: 10px; width: 30%; height: 30px; }
+        .block-4 { top: 65px; left: 10px; width: 20%; height: 40px; }
+        .block-5 { top: 80px; right: 10px; width: 40%; height: 60px; }
+        .block-6 { bottom: 10px; left: 40%; width: 20%; height: 30px; }
 
-        /* Minimalist Typography Labels - Shifted to regional markers */
-        .street-label {
-            position: absolute;
-            font-family: var(--font-family);
-            font-size: 8px;
-            color: rgba(255, 255, 255, 0.15); /* Subtly dimmed for macro view */
-            letter-spacing: 1px;
-            pointer-events: none;
-        }
-        .avenue-a { top: 12px; left: 15px; font-size: 7px; color: rgba(255, 255, 255, 0.1); }
-        .avenue-b { bottom: 12px; right: 15px; font-size: 7px; color: rgba(255, 255, 255, 0.1); }
-        .street-1 { top: 64px; left: 15px; font-size: 7px; color: rgba(255, 255, 255, 0.1); }
-
-        /* Find My Friends Style Clean Tracking Dot */
+        /* The tracking dot is now smaller to match the regional scale */
         .friend-tracker-dot {
             position: absolute;
-            top: 92px; /* Centered nicely within the dense grid grid lines */
+            top: 50%; 
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 10px;
-            height: 10px;
+            width: 8px; /* Smaller for zoomed-out perspective */
+            height: 8px;
             background-color: var(--glow-green);
             border-radius: 50%;
-            box-shadow: 0 0 10px var(--glow-green);
+            box-shadow: 0 0 8px var(--glow-green);
             z-index: 10;
         }
 
-        /* Soft, ambient breathing ring */
+        /* Fainter pulse for the zoomed-out view */
         .friend-tracker-dot::after {
             content: '';
             position: absolute;
-            top: -10px;
-            left: -10px;
-            width: 30px;
-            height: 30px;
-            background: rgba(121, 248, 44, 0.15);
+            top: -12px;
+            left: -12px;
+            width: 32px;
+            height: 32px;
+            border: 1px solid rgba(121, 248, 44, 0.1);
             border-radius: 50%;
-            animation: softPulse 2.5s infinite ease-in-out;
+            animation: macroPulse 3s infinite ease-out;
         }
 
-        @keyframes softPulse {
-            0%, 100% { transform: scale(0.8); opacity: 0.4; }
-            50% { transform: scale(1.1); opacity: 0.8; }
+        @keyframes macroPulse {
+            0% { transform: scale(0.5); opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 0; }
         }
         }
     </style>
@@ -484,19 +456,14 @@
         <div class="tracker-card">
             <div class="section-header">Location Tracking</div>
             <div class="map-container" style="margin-top: 10px;">
-                
-                <!-- Minimalist Abstract City Blocks -->
+                <!-- 6 Regional Blocks -->
                 <div class="map-block block-1"></div>
                 <div class="map-block block-2"></div>
                 <div class="map-block block-3"></div>
                 <div class="map-block block-4"></div>
+                <div class="map-block block-5"></div>
+                <div class="map-block block-6"></div>
                 
-                <!-- Elegant, faint street labels -->
-                <div class="street-label avenue-a">5TH AVE</div>
-                <div class="street-label avenue-b">6TH AVE</div>
-                <div class="street-label street-1">W 42ND ST</div>
-                
-                <!-- The Tracking Dot (Clean, steady glow like Find My) -->
                 <div class="friend-tracker-dot"></div>
             </div>
         </div>
