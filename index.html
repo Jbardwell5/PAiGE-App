@@ -94,38 +94,68 @@
             display: block;
         }
 
-        /* Message Input Box */
-        .input-card {
-            border: 1px solid var(--border-color);
-            background-color: rgba(39, 49, 27, 0.1);
-            border-radius: 8px;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+       /* 1. The Main Input Container */
+.input-card {
+    background: #141911 !important; 
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
 
-        textarea {
-            width: 100%;
-            height: 93px;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: var(--text-bright);
-            font-family: inherit;
-            font-size: 16px;
-            resize: none;
-        }
+/* 2. The Textarea inside the Input */
+.input-card textarea {
+    width: 100%;
+    min-height: 80px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-family: 'Courier New', monospace; /* Keeping your PAiGE terminal vibe */
+    font-size: 14px;
+    resize: none;
+    outline: none;
+    margin-bottom: 10px;
+}
 
-        textarea::placeholder {
-            color: var(--text-dim);
-        }
+/* 3. The Send Button */
+.send-btn {
+    background: var(--glow-green);
+    color: #000;
+    border: none;
+    padding: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-top: 5px;
+}
 
-        .char-count {
-            text-align: right;
-            font-size: 11px;
-            color: var(--text-dim);
-        }
+/* 4. The History Container (The "Recent Pages" log) */
+.recent-pages {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+/* 5. The Individual Message Cards (Styled to match the input) */
+.message-card {
+    background: #141911 !important;
+    border: 1px solid rgba(121, 248, 44, 0.2);
+    padding: 12px;
+    border-radius: 4px;
+    color: #e0e0e0;
+    font-family: monospace;
+}
+
+.message-card .timestamp {
+    font-size: 8px;
+    color: var(--glow-green);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    display: block;
+}
 
         /* Controls: Toggle & Send Button */
         .controls {
@@ -449,17 +479,16 @@
             <img src="apple-touch-logo.png" alt="PAiGE Logo" class="logo-image">
         </header>
 
-        <div class="input-card">
-            <textarea placeholder="COMPOSE..." maxlength="160" id="message-input"></textarea>
-            <div class="char-count"><span id="char-counter">0</span> / 160</div>
-            <!-- Input area -->
-            <input type="text" id="messageInput" placeholder="Type a message...">
-            <button onclick="sendMessage()">Send</button>
+       <div class="input-card">
+    <textarea placeholder="COMPOSE..." maxlength="160" id="message-input" oninput="updateCounter()"></textarea>
+    <div class="char-count"><span id="char-counter">0</span> / 160</div>
+    <button class="send-btn" onclick="sendMessage()">SEND</button>
+</div>
 
-            <!-- History area -->
-            <div id="recentPagesContainer" class="recent-pages">
-            <!-- Messages will appear here automatically -->
-         </div>
+<!-- History sits outside the input card to prevent layout bugs -->
+<div id="recentPagesContainer" class="recent-pages">
+    <!-- Messages appear here -->
+</div>
             
             <div class="controls">
                 <label class="toggle-container">
