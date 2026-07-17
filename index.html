@@ -357,62 +357,56 @@
             max-width: 280px;
         }
 
-      /* Map Container: Macro/Regional View */
+     /* Map Container: Optimized for real map images */
         .map-container {
             position: relative;
             width: 100%;
             height: 180px; 
             border-radius: 8px;
             overflow: hidden;
-            background-color: #0f120d; /* Slightly darker to emphasize the map data */
+            background-color: #0f120d; /* Background color behind the map */
             border: 1px solid var(--border-color);
         }
 
-        /* Tiny, dense blocks for a "Zoomed Out" feel */
-        .map-block {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.02); 
-            border-radius: 1px;
+        /* The Static Map Image: This filter stack makes standard map dark modes look premium */
+        .static-map {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Important: prevents stretching */
+            filter: brightness(0.65) contrast(1.1) grayscale(0.5) sepia(0.2);
         }
-        
-        /* Regional Grid Pattern */
-        .block-1 { top: 10px; left: 10px; width: 15%; height: 30px; }
-        .block-2 { top: 10px; left: 30%; width: 25%; height: 50px; }
-        .block-3 { top: 10px; right: 10px; width: 30%; height: 30px; }
-        .block-4 { top: 65px; left: 10px; width: 20%; height: 40px; }
-        .block-5 { top: 80px; right: 10px; width: 40%; height: 60px; }
-        .block-6 { bottom: 10px; left: 40%; width: 20%; height: 30px; }
 
-        /* The tracking dot is now smaller to match the regional scale */
+        /* Premium "Blip" Tracker Dot */
         .friend-tracker-dot {
             position: absolute;
-            top: 50%; 
+            top: 50%; /* We are centering it for the demo macro view */
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 8px; /* Smaller for zoomed-out perspective */
-            height: 8px;
+            width: 7px; /* Tiny, high-fidelity blip */
+            height: 7px;
             background-color: var(--glow-green);
             border-radius: 50%;
-            box-shadow: 0 0 8px var(--glow-green);
+            box-shadow: 0 0 10px var(--glow-green);
             z-index: 10;
         }
 
-        /* Fainter pulse for the zoomed-out view */
+        /* Fast, sharp digital "Blip" animation (not a pulse) */
         .friend-tracker-dot::after {
             content: '';
             position: absolute;
             top: -12px;
             left: -12px;
-            width: 32px;
-            height: 32px;
-            border: 1px solid rgba(121, 248, 44, 0.1);
+            width: 31px;
+            height: 31px;
+            border: 1px solid var(--glow-green);
             border-radius: 50%;
-            animation: macroPulse 3s infinite ease-out;
+            opacity: 0;
+            animation: digitalBlip 1s infinite linear;
         }
 
-        @keyframes macroPulse {
-            0% { transform: scale(0.5); opacity: 0.5; }
-            100% { transform: scale(1.5); opacity: 0; }
+        @keyframes digitalBlip {
+            0% { transform: scale(0.1); opacity: 1; }
+            100% { transform: scale(1.0); opacity: 0; }
         }
         }
     </style>
@@ -452,19 +446,18 @@
             <div class="log-text">Hi, When will you be home?</div>
         </div>
 
-       <!-- Pager Location Tracker -->
+       <!-- Pager Location Tracker - Manhattan Macro View -->
         <div class="tracker-card">
             <div class="section-header">Location Tracking</div>
             <div class="map-container" style="margin-top: 10px;">
-                <!-- 6 Regional Blocks -->
-                <div class="map-block block-1"></div>
-                <div class="map-block block-2"></div>
-                <div class="map-block block-3"></div>
-                <div class="map-block block-4"></div>
-                <div class="map-block block-5"></div>
-                <div class="map-block block-6"></div>
+                <!-- NEW MAP URL: Optimized High-Resolution Manhattan Grid Macro-View (Requires No Token) -->
+                <img class="static-map" 
+                     <img class="static-map" 
+                          src="https://tiles.stadiamaps.com/static/alidade_smooth_dark/11/-73.98/40.78/600x360@2x.png" 
+                          alt="Manhattan Grid Map">
                 
-                <div class="friend-tracker-dot"></div>
+                <!-- The tiny, steady "Blip" (Positioned over Midtown for now) -->
+                <div class="friend-tracker-dot blip-location"></div>
             </div>
         </div>
 
