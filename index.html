@@ -357,7 +357,7 @@
             max-width: 280px;
         }
 
-       /* Map Container: Clean & Dark */
+      /* Map Container: Clean & Dark */
         .map-container {
             position: relative;
             width: 100%;
@@ -368,38 +368,54 @@
             border: 1px solid var(--border-color);
         }
 
-        /* Abstract Minimalist City Blocks */
+        /* Abstract Minimalist City Blocks - Zoomed Out Macro View */
         .map-block {
             position: absolute;
-            background: rgba(255, 255, 255, 0.03); /* Very soft, structural block color */
-            border-radius: 4px;
-            border: 1px solid rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.03); /* Soft, structural block color */
+            border-radius: 2px; /* Sharper corners for smaller blocks */
+            border: 1px solid rgba(255, 255, 255, 0.01);
         }
         
-        /* Positioning the blocks to create "streets" */
-        .block-1 { top: 15px; left: 15px; width: 40%; height: 65px; }
-        .block-2 { top: 15px; right: 15px; width: 45%; height: 65px; }
-        .block-3 { bottom: 15px; left: 15px; width: 40%; height: 65px; }
-        .block-4 { bottom: 15px; right: 15px; width: 45%; height: 65px; }
+        /* A dense grid array representing a macro city layout */
+        .block-1 { top: 15px; left: 15px; width: 25%; height: 45px; }
+        .block-2 { top: 15px; left: 45%; width: 50%; height: 45px; }
+        .block-3 { top: 75px; left: 15px; width: 35%; height: 35px; }
+        .block-4 { top: 75px; left: 55%; width: 40%; height: 35px; }
+        
+        /* Adding a couple extra background blocks to fill out the macro grid */
+        .map-container::before {
+            content: '';
+            position: absolute;
+            bottom: 15px; left: 15px; width: 50%; height: 40px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 2px;
+        }
+        .map-container::after {
+            content: '';
+            position: absolute;
+            bottom: 15px; right: 15px; width: 25%; height: 40px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 2px;
+        }
 
-        /* Minimalist Typography Labels */
+        /* Minimalist Typography Labels - Shifted to regional markers */
         .street-label {
             position: absolute;
             font-family: var(--font-family);
-            font-size: 9px;
-            color: rgba(255, 255, 255, 0.2); /* Faint, elegant text */
+            font-size: 8px;
+            color: rgba(255, 255, 255, 0.15); /* Subtly dimmed for macro view */
             letter-spacing: 1px;
             pointer-events: none;
         }
-        .avenue-a { top: 40px; left: 45%; transform: translateX(-50%); }
-        .avenue-b { top: 120px; left: 45%; transform: translateX(-50%); }
-        .street-1 { top: 92px; left: 20px; font-size: 8px; }
+        .avenue-a { top: 12px; left: 15px; font-size: 7px; color: rgba(255, 255, 255, 0.1); }
+        .avenue-b { bottom: 12px; right: 15px; font-size: 7px; color: rgba(255, 255, 255, 0.1); }
+        .street-1 { top: 64px; left: 15px; font-size: 7px; color: rgba(255, 255, 255, 0.1); }
 
         /* Find My Friends Style Clean Tracking Dot */
         .friend-tracker-dot {
             position: absolute;
-            top: 60px; /* Positioned naturally at a street intersection */
-            left: 45%;
+            top: 92px; /* Centered nicely within the dense grid grid lines */
+            left: 50%;
             transform: translate(-50%, -50%);
             width: 10px;
             height: 10px;
@@ -409,7 +425,7 @@
             z-index: 10;
         }
 
-        /* Soft, ambient breathing ring (not a sharp radar pulse) */
+        /* Soft, ambient breathing ring */
         .friend-tracker-dot::after {
             content: '';
             position: absolute;
