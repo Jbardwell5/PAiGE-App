@@ -357,51 +357,78 @@
             max-width: 280px;
         }
 
-     /* Map Container: Optimized for real map images */
+     /* Map Container Base */
         .map-container {
             position: relative;
             width: 100%;
             height: 180px; 
             border-radius: 8px;
             overflow: hidden;
-            background-color: #0f120d; /* Background color behind the map */
+            background-color: #0f120d; /* Deep olive-black background */
             border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        /* The Static Map Image: This filter stack makes standard map dark modes look premium */
-        .static-map {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Important: prevents stretching */
-            filter: brightness(0.65) contrast(1.1) grayscale(0.5) sepia(0.2);
+        /* SVG Map Styling */
+        .vector-map {
+            width: 110%;
+            height: 110%;
+            object-fit: cover;
+            opacity: 0.65;
         }
 
-        /* Premium "Blip" Tracker Dot */
+        /* Stylized Landmass (Soft dark tint) */
+        .map-land {
+            fill: rgba(255, 255, 255, 0.04);
+            stroke: rgba(121, 248, 44, 0.2);
+            stroke-width: 0.8;
+        }
+
+        /* Central Park (Recognizable dark rectangle cutout) */
+        .map-park {
+            fill: #0f120d;
+            stroke: rgba(121, 248, 44, 0.15);
+            stroke-width: 0.5;
+        }
+
+        /* Surrounding Coastlines & Grids */
+        .map-coast {
+            fill: none;
+            stroke: rgba(121, 248, 44, 0.1);
+            stroke-width: 0.8;
+        }
+        .map-grid-line {
+            stroke: rgba(121, 248, 44, 0.05);
+            stroke-width: 0.5;
+        }
+
+        /* High-Fidelity "Blip" Tracker Dot */
         .friend-tracker-dot {
             position: absolute;
-            top: 50%; /* We are centering it for the demo macro view */
-            left: 50%;
+            top: 48%; /* Positioned directly on the Manhattan landmass */
+            left: 48%;
             transform: translate(-50%, -50%);
-            width: 7px; /* Tiny, high-fidelity blip */
-            height: 7px;
+            width: 6px; 
+            height: 6px;
             background-color: var(--glow-green);
             border-radius: 50%;
-            box-shadow: 0 0 10px var(--glow-green);
+            box-shadow: 0 0 8px var(--glow-green);
             z-index: 10;
         }
 
-        /* Fast, sharp digital "Blip" animation (not a pulse) */
         .friend-tracker-dot::after {
             content: '';
             position: absolute;
             top: -12px;
             left: -12px;
-            width: 31px;
-            height: 31px;
+            width: 30px;
+            height: 30px;
             border: 1px solid var(--glow-green);
             border-radius: 50%;
             opacity: 0;
-            animation: digitalBlip 1s infinite linear;
+            animation: digitalBlip 1.2s infinite linear;
         }
 
         @keyframes digitalBlip {
@@ -454,18 +481,26 @@
             <div class="log-text">Hi, When will you be home?</div>
         </div>
 
-       <!-- Pager Location Tracker - Manhattan Macro View -->
+      <!-- Pager Location Tracker - Local SVG Manhattan Grid -->
         <div class="tracker-card">
             <div class="section-header">Location Tracking</div>
             <div class="map-container" style="margin-top: 10px;">
-                <!-- NEW MAP URL: Optimized High-Resolution Manhattan Grid Macro-View (Requires No Token) -->
-                <img class="static-map" 
-                     <img class="static-map" 
-                          src="https://tiles.stadiamaps.com/static/alidade_smooth_dark/11/-73.98/40.78/600x360@2x.png" 
-                          alt="Manhattan Grid Map">
                 
-                <!-- The tiny, steady "Blip" (Positioned over Midtown for now) -->
-                <div class="friend-tracker-dot blip-location"></div>
+                <!-- Pure Local SVG Vector Map (No Internet Required) -->
+                <svg class="vector-map" viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Manhattan Landmass -->
+                    <path d="M20,95 Q35,70 65,55 T120,35 T160,25 L165,28 Q140,42 110,58 T60,82 T15,102 Z" class="map-land" />
+                    <!-- Central Park Landmark -->
+                    <rect x="85" y="44" width="25" height="6" transform="rotate(-22, 85, 44)" class="map-park" />
+                    <!-- Long Island / Queens Coastline -->
+                    <path d="M40,115 Q80,95 130,80 T190,70" class="map-coast" />
+                    <!-- Abstract Regional Grid Lines -->
+                    <line x1="30" y1="120" x2="180" y2="20" class="map-grid-line" stroke-dasharray="2,4" />
+                    <line x1="10" y1="90" x2="160" y2="0" class="map-grid-line" stroke-dasharray="2,4" />
+                </svg>
+                
+                <!-- The Tiny, Steady Digital Blip -->
+                <div class="friend-tracker-dot"></div>
             </div>
         </div>
 
