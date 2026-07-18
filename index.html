@@ -507,9 +507,9 @@ textarea::placeholder {
                     </span>
                     <span class="toggle-label">PRIORITY</span>
                 </label>
-                <button class="btn-send">PAGE</button>
-            </div>
-        </div>
+                <button class="btn-send" id="send-btn" disabled>PAGE</button>
+          </div>
+        
 
         <div class="shortcut-hint">⌘ + ENTER TO SEND</div>
 
@@ -533,83 +533,83 @@ textarea::placeholder {
     </div>
 </div>
 
-  <script>
-        const textarea = document.getElementById('message-input');
-        const counter = document.getElementById('char-counter');
-        const sendButton = document.querySelector('.btn-send');
+ <script>
+    const input = document.getElementById('message-input');
+    const counter = document.getElementById('char-counter');
+    const btn = document.getElementById('send-btn');
+    const container = document.getElementById('recentPagesContainer') || document.querySelector('.log-card')?.parentNode;
 
-        // Set initial state of the button
-        sendButton.disabled = true;
+    // 1. Listen for typing to unlock/lock the button state
+    input.addEventListener('input', () => {
+        const currentLength = input.value.length;
+        counter.textContent = currentLength;
 
-        // Monitor character count and toggle button active state
-        textarea.addEventListener('input', () => {
-            const currentLength = textarea.value.length;
-            counter.textContent = currentLength;
+        // Toggle active visual states based on content
+        if (currentLength > 0 && !btn.classList.contains('paging') && !btn.classList.contains('sent-success')) {
+            btn.classList.add('active');
+            btn.disabled = false;
+        } else if (currentLength === 0) {
+            btn.classList.remove('active');
+            btn.disabled = true;
+        }
+    });
 
-            // Only toggle if we aren't currently sending a message
-            if (!sendButton.classList.contains('transmitting') && !sendButton.classList.contains('sent-success')) {
-                if (currentLength > 0) {
-                    sendButton.classList.add('active');
-                    sendButton.disabled = false;
-                } else {
-                    sendButton.classList.remove('active');
-                    sendButton.disabled = true;
-                }
+    // 2. Handle the page submission animation and history logging
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (!input.value.trim()) return;
+
+        const originalText = input.value;
+
+        // Freeze button and transition to transmitting state
+        btn.disabled = true;
+        btn.classList.remove('active');
+        btn.classList.add('paging');
+        btn.textContent = 'PAGING...';
+
+        // Clear input field immediately for a snappy hardware feel
+        input.value = '';
+        counter.textContent = '0';
+
+        // Create and append the new history log card
+        const timeString = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const dateString = new Date().toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
+        
+        const newCard = document.createElement('div');
+        newCard.className = 'log-card';
+        newCard.style.marginTop = '15px'; // Matches layout spacing
+        newCard.innerHTML = `
+            <div class="log-timestamp">${dateString} ${timeString}</div>
+            <div class="log-text">${originalText}</div>
+        `;
+
+        // Push new card to the top of the history list if container exists
+        if (container) {
+            // Inserts right below the "recent pages" section header
+            const sectionHeader = document.querySelector('.section-header');
+            if (sectionHeader && sectionHeader.nextSibling) {
+                sectionHeader.parentNode.insertBefore(newCard, sectionHeader.nextSibling);
+            } else {
+                container.prepend(newCard);
             }
-        });
+        }
 
-        // The Sending Action Sequence
-        sendButton.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent any form submission defaults
+        // 3. Trigger success animations on delay
+        setTimeout(() => {
+            btn.classList.remove('paging');
+            btn.classList.add('sent-success');
+            btn.textContent = 'SENT';
 
-            // 1. Change to PAGING state
-            sendButton.disabled = true;
-            sendButton.classList.remove('active');
-            sendButton.classList.add('paging');
-            sendButton.textContent = 'PAGING...';
-
-            // Clear the input box and counter immediately so it feels like the message has been "sent"
-            textarea.value = '';
-            counter.textContent = '0';
-
-            // 2. After 3 seconds of "paging", switch to SENT
+            // 4. Return to standby default state
             setTimeout(() => {
-                sendButton.classList.remove('paging');
-                sendButton.classList.add('sent-success');
-                sendButton.textContent = 'SENT';
+                btn.classList.remove('sent-success');
+                btn.textContent = 'PAGE';
+                btn.disabled = true;
+            }, 1500);
 
-                // 3. After 1.5 more second, reset back to the default empty PAGE state
-                setTimeout(() => {
-                    sendButton.classList.remove('sent-success');
-                    sendButton.textContent = 'PAGE';
-                }, 1500);
-
-            }, 3000);
-        });
-      <script>
-    // Simulated tracking matrix for the static map
-    function simulateBlipMovement() {
-        const blip = document.getElementById('dynamic-blip');
-        if (!blip) return;
-
-        // Bound variables keep the dot in the center region of Manhattan/New York labels
-        const minPct = 40;
-        const maxPct = 60;
-
-        setInterval(() => {
-            // Generate minor random coordinate shifts
-            const randomTop = Math.floor(Math.random() * (maxPct - minPct + 1)) + minPct;
-            const randomLeft = Math.floor(Math.random() * (maxPct - minPct + 1)) + minPct;
-
-            // Apply new coordinates
-            blip.style.top = `${randomTop}%`;
-            blip.style.left = `${randomLeft}%`;
-        }, 4000); // Shifting coordinates smoothly every 4 seconds
-    }
-
-    // Fire up the tracking loop when the document loads
-    document.addEventListener('DOMContentLoaded', simulateBlipMovement);
-    </script>
+        }, 2000);
+    });
+</script>
     
 </body>
 </html>
