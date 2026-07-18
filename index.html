@@ -16,13 +16,12 @@
 
     <style>
         :root {
-            --bg-color: #12140e;
-            --border-color: #27311b;
-            --glow-green: #79f82c;
-            --text-dim: #5c6c4c;
-            --text-bright: #9efb61;
-            --alert-red: #ff3b30;
-        }
+    --bg-color: #12140e;
+    --border-color: #39432d; /* Hardened borders for better visibility */
+    --glow-green: #79f82c;
+    --text-dim: #a1b58f;    /* BUMPED: Was dim olive, now a bright, legible sage */
+    --text-bright: #79f82c; /* The ultra-bright brand green */
+}
 
         * {
             box-sizing: border-box;
@@ -106,26 +105,46 @@
         }
 
         textarea {
-            width: 100%;
-            height: 93px;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: var(--text-bright);
-            font-family: inherit;
-            font-size: 16px;
-            resize: none;
-        }
+    width: 100%;
+    min-height: 80px;
+    background: transparent;
+    border: none;
+    color: #ffffff; /* FIXED: Pure white text guarantees visibility in daylight */
+    font-family: inherit;
+    font-size: 16px; /* BUMPED: 16px also prevents iOS from auto-zooming the screen */
+    resize: none;
+    outline: none;
+}
 
-        textarea::placeholder {
-            color: var(--text-dim);
-        }
+/* Placeholder text color */
+textarea::placeholder {
+    color: var(--text-dim); /* Clearer, brighter placeholder */
+    opacity: 0.8;
+}
 
         .char-count {
-            text-align: right;
-            font-size: 11px;
-            color: var(--text-dim);
-        }
+    font-size: 11px;
+    color: var(--text-dim); /* Utilizes the brighter sage color */
+    text-align: right;
+    font-weight: 600; /* Added weight to help cut through glare */
+}
+
+/* The ⌘ + ENTER TO SEND hint text */
+.shortcut-hint {
+    color: var(--text-dim);
+    opacity: 0.9;     /* Pushed up from being washed out */
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+/* Recent Pages Timestamp */
+.message-card small {
+    display: block;
+    text-align: right;
+    margin-top: 10px;
+    color: var(--text-dim); /* Lifted from the old dark green */
+    font-weight: 600;
+}
 
         /* Controls: Toggle & Send Button */
         .controls {
