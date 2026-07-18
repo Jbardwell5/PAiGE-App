@@ -407,7 +407,61 @@
         @keyframes digitalBlip {
             0% { transform: scale(0.1); opacity: 1; }
             100% { transform: scale(1.0); opacity: 0; }
-        }
+        }/* Map Container Setup */
+.map-container {
+    position: relative;
+    width: 100%;
+    height: 180px; 
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #0f120d; /* Deep olive-black */
+    border: 1px solid var(--border-color);
+}
+
+/* Hardened Terminal Green Filter Matrix */
+.static-map-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.75;
+    /* This shifts the grays into a crisp, glowing digital green hue */
+    filter: brightness(0.9) contrast(1.1) sepia(1) hue-rotate(75deg) saturate(2.5);
+}
+
+/* High-Fidelity "Blip" Tracker Dot */
+.friend-tracker-dot {
+    position: absolute;
+    top: 50%; /* Initial starting position */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 7px; 
+    height: 7px;
+    background-color: var(--glow-green);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--glow-green);
+    z-index: 10;
+    transition: top 2.5s ease-in-out, left 2.5s ease-in-out; /* Smooths out the movement */
+}
+
+/* Pulsing Outer Radar Ring */
+.friend-tracker-dot::after {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: -12px;
+    width: 31px;
+    height: 31px;
+    border: 1px solid var(--glow-green);
+    border-radius: 50%;
+    opacity: 0;
+    animation: digitalRadar 1.8s infinite linear;
+}
+
+@keyframes digitalRadar {
+    0% { transform: scale(0.1); opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { transform: scale(1.0); opacity: 0; }
+}
         }
     </style>
 </head>
@@ -446,20 +500,19 @@
             <div class="log-text">Hi, When will you be home?</div>
         </div>
 
-       <!-- Pager Location Tracker - Manhattan Macro View -->
-        <div class="tracker-card">
-            <div class="section-header">Location Tracking</div>
-            <div class="map-container" style="margin-top: 10px;">
-                <!-- NEW MAP URL: Optimized High-Resolution Manhattan Grid Macro-View (Requires No Token) -->
-                <img class="static-map" 
-                     <img class="static-map" 
-                          src="https://tiles.stadiamaps.com/static/alidade_smooth_dark/11/-73.98/40.78/600x360@2x.png" 
-                          alt="Manhattan Grid Map">
-                
-                <!-- The tiny, steady "Blip" (Positioned over Midtown for now) -->
-                <div class="friend-tracker-dot blip-location"></div>
-            </div>
-        </div>
+      <!-- Pager Location Tracker - Static Map with Dynamic Blip -->
+<div class="tracker-card">
+    <div class="section-header">Location Tracking</div>
+    <div class="map-container" style="margin-top: 10px;">
+        
+        <!-- The Static Background Map -->
+        <img src="map-static.png" alt="Manhattan Tracking Map" class="static-map-img">
+        
+        <!-- The Simulated Moving Dot & Radar Rings -->
+        <div id="dynamic-blip" class="friend-tracker-dot"></div>
+        
+    </div>
+</div>
 
   <script>
         const textarea = document.getElementById('message-input');
@@ -514,6 +567,29 @@
 
             }, 3000);
         });
+      <script>
+    // Simulated tracking matrix for the static map
+    function simulateBlipMovement() {
+        const blip = document.getElementById('dynamic-blip');
+        if (!blip) return;
+
+        // Bound variables keep the dot in the center region of Manhattan/New York labels
+        const minPct = 40;
+        const maxPct = 60;
+
+        setInterval(() => {
+            // Generate minor random coordinate shifts
+            const randomTop = Math.floor(Math.random() * (maxPct - minPct + 1)) + minPct;
+            const randomLeft = Math.floor(Math.random() * (maxPct - minPct + 1)) + minPct;
+
+            // Apply new coordinates
+            blip.style.top = `${randomTop}%`;
+            blip.style.left = `${randomLeft}%`;
+        }, 4000); // Shifting coordinates smoothly every 4 seconds
+    }
+
+    // Fire up the tracking loop when the document loads
+    document.addEventListener('DOMContentLoaded', simulateBlipMovement);
     </script>
     
 </body>
