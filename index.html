@@ -554,11 +554,12 @@ textarea::placeholder {
         }
     });
 
-    // 2. Handle the page submission animation and history logging
+    // 2. Handle the page submission animation and delayed history logging
     btn.addEventListener('click', (e) => {
         e.preventDefault();
         if (!input.value.trim()) return;
 
+        // Store the text in memory before clearing the input field
         const originalText = input.value;
 
         // Freeze button and transition to transmitting state
@@ -571,34 +572,33 @@ textarea::placeholder {
         input.value = '';
         counter.textContent = '0';
 
-        // Create and append the new history log card
-        const timeString = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        const dateString = new Date().toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
-        
-        const newCard = document.createElement('div');
-        newCard.className = 'log-card';
-        newCard.style.marginTop = '15px'; // Matches layout spacing
-        newCard.innerHTML = `
-            <div class="log-timestamp">${dateString} ${timeString}</div>
-            <div class="log-text">${originalText}</div>
-        `;
-
-        // Push new card to the top of the history list if container exists
-        if (container) {
-            // Inserts right below the "recent pages" section header
-            const sectionHeader = document.querySelector('.section-header');
-            if (sectionHeader && sectionHeader.nextSibling) {
-                sectionHeader.parentNode.insertBefore(newCard, sectionHeader.nextSibling);
-            } else {
-                container.prepend(newCard);
-            }
-        }
-
-        // 3. Trigger success animations on delay
+        // 3. Trigger success animations and POPULATE log on delay
         setTimeout(() => {
             btn.classList.remove('paging');
             btn.classList.add('sent-success');
             btn.textContent = 'SENT';
+
+            // CRUCIAL: The history card is created and injected ONLY when "SENT" lights up
+            const timeString = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const dateString = new Date().toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
+            
+            const newCard = document.createElement('div');
+            newCard.className = 'log-card';
+            newCard.style.marginTop = '15px'; // Matches layout spacing
+            newCard.innerHTML = `
+                <div class="log-timestamp">${dateString} ${timeString}</div>
+                <div class="log-text">${originalText}</div>
+            `;
+
+            // Push new card right below the "Recent Pages" section header
+            if (container) {
+                const sectionHeader = document.querySelector('.section-header');
+                if (sectionHeader && sectionHeader.nextSibling) {
+                    sectionHeader.parentNode.insertBefore(newCard, sectionHeader.nextSibling);
+                } else {
+                    container.prepend(newCard);
+                }
+            }
 
             // 4. Return to standby default state
             setTimeout(() => {
@@ -607,9 +607,30 @@ textarea::placeholder {
                 btn.disabled = true;
             }, 1500);
 
-        }, 3000);
+        }, 2000); // 2-second processing/transmitting illusion window
     });
+
+    // 5. Simulated tracking matrix for the static map
+    function simulateBlipMovement() {
+        const blip = document.getElementById('dynamic-blip');
+        if (!blip) return;
+
+        const minPct = 40;
+        const maxPct = 60;
+
+        setInterval(() => {
+            const randomTop = Math.floor(Math.random() * (maxPct - minPct + 1)) + minPct;
+            const randomLeft = Math.floor(Math.random() * (maxPct - minPct + 1)) + minPct;
+
+            blip.style.top = `${randomTop}%`;
+            blip.style.left = `${randomLeft}%`;
+        }, 4000);
+    }
+
+    // Fire up the tracking loop when the document loads
+    document.addEventListener('DOMContentLoaded', simulateBlipMovement);
 </script>
+
     
 </body>
 </html>
