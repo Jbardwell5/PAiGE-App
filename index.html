@@ -407,6 +407,30 @@ textarea::placeholder {
 .priority-mode-active .logo-image-class {
     filter: hue-rotate(260deg) saturate(1.5) brightness(0.9);
 }
+       /* Critical Priority State Overrides */
+.priority-mode-active {
+    --glow-green: #ff3b30;     /* Laser Crimson Red */
+    --text-bright: #ff3b30;    /* Text accents shift to red */
+}
+
+/* Force the switch container to flash critical red */
+#urgency-toggle:checked + .slider {
+    background-color: #ff3b30 !important;
+    box-shadow: 0 0 12px rgba(255, 59, 48, 0.8);
+}
+
+/* Make the compose box border turn red */
+.priority-mode-active .input-card {
+    border-color: #ff3b30 !important;
+    box-shadow: inset 0 0 8px rgba(255, 59, 48, 0.2);
+}
+
+/* FLIP THE MAP GRID TO CRITICAL RED */
+.priority-mode-active .static-map-img {
+    /* This shifts the gray lines of your static asset into a crisp, glowing digital red */
+    filter: brightness(0.7) contrast(1.2) sepia(1) hue-rotate(310deg) saturate(3);
+    opacity: 0.85;
+}
      /* Map Container: Optimized for real map images */
         .map-container {
             position: relative;
