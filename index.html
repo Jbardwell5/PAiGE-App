@@ -375,6 +375,17 @@ textarea::placeholder {
             line-height: 1.4;
             max-width: 280px;
         }
+        /* Priority State Mode Overrides */
+.priority-mode-active {
+    --glow-green: #ff9f0a;     /* Vivid high-contrast orange/amber */
+    --text-bright: #ff9f0a;    /* Shifting bright UI accents to amber */
+}
+
+/* Make the switch track itself turn amber when flipped */
+#urgency-toggle:checked + .slider {
+    background-color: #ff9f0a !important;
+    box-shadow: 0 0 10px #ff9f0a;
+}
 
      /* Map Container: Optimized for real map images */
         .map-container {
@@ -629,6 +640,23 @@ textarea::placeholder {
 
     // Fire up the tracking loop when the document loads
     document.addEventListener('DOMContentLoaded', simulateBlipMovement);
+     const toggle = document.getElementById('urgency-toggle');
+
+    // Handle shifting the entire interface style based on Priority state
+    toggle.addEventListener('change', () => {
+        if (toggle.checked) {
+            // Add the amber overlay class to the outermost app container
+            document.body.classList.add('priority-mode-active');
+        } else {
+            // Remove it to revert back to default terminal green
+            document.body.classList.remove('priority-mode-active');
+        }
+    });
+
+    // Run once on load to establish initial state alignment
+    if (toggle && toggle.checked) {
+        document.body.classList.add('priority-mode-active');
+    }
 </script>
 
     
