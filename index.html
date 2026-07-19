@@ -403,9 +403,9 @@ textarea::placeholder {
     100% { box-shadow: inset 0 0 15px rgba(255, 59, 48, 0.1); }
 }
         
-/* Adjusted filter to shift from bright green straight to crimson red instead of pink */
+/* Force the image logo to drop color and output a pure crimson overlay */
 .priority-mode-active img[src*="apple-touch-logo"] {
-    filter: hue-rotate(240deg) saturate(2.5) brightness(0.75) contrast(1.2) !important;
+    filter: brightness(0) saturate(100%) invert(23%) sepia(97%) saturate(6011%) hue-rotate(352deg) brightness(97%) contrast(106%) !important;
 }
        /* Critical Priority State Overrides */
 .priority-mode-active {
