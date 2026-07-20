@@ -595,24 +595,67 @@ textarea::placeholder {
             <textarea placeholder="COMPOSE..." maxlength="160" id="message-input"></textarea>
             <div class="char-count"><span id="char-counter">160</span> REMAINING</div>
             
+            <!-- Controls Container (Contains ONLY the toggle and page button) -->
             <div class="controls">
                 <label class="toggle-container">
                     <span class="switch">
-                        <input type="checkbox" id="urgency-toggle"
+                        <input type="checkbox" id="urgency-toggle">
                         <span class="slider"></span>
                     </span>
                     <span class="toggle-label">PRIORITY</span>
                 </label>
                 <button class="btn-send" id="send-btn" disabled>PAGE</button>
-                <!-- Replace your hardcoded history card with this format -->
-<div class="log-card" data-timestamp="1784386800000"> <!-- Set to a past timestamp -->
-    <div class="log-timestamp">4h AGO</div>
-    <div class="log-text">Hi, When will you be home?</div>
-    <div class="log-status-row">
-        <span class="delivery-status">✓ DELIVERED</span>
-        <span class="read-status read">READ</span>
-    </div>
-</div>
+            </div> <!-- CLOSE CONTROLS HERE -->
+        </div> <!-- CLOSE INPUT CARD HERE -->
+        
+        <div class="shortcut-hint">⌘ + ENTER TO SEND</div>
+
+        <div class="section-header">recent pages</div>
+        
+        <!-- Log History Container (Completely outside the input/control card) -->
+        <div id="log-history-container">
+            <!-- Dynamic Past Relative Timestamp Mock Card -->
+            <div class="log-card" data-timestamp="1784386800000"> 
+                <div class="log-timestamp">4h AGO</div>
+                <div class="log-text">Hi, When will you be home?</div>
+                <div class="log-status-row">
+                    <span class="delivery-status">✓ DELIVERED</span>
+                    <span class="read-status read">READ</span>
+                </div>
+            </div>
+
+            <div class="log-card">
+                <div class="log-timestamp">JUL 18, 2026 AT 10:00 AM</div>
+                <div class="log-text">Hi, When will you be home?</div>
+            </div>
+        </div>
+
+        <!-- Pager Location Tracker Section -->
+        <div class="tracker-card">
+            <div class="section-header">Location Tracking</div>
+            
+            <!-- Telemetry High-Density Card -->
+            <div class="log-card" style="gap: 8px; background-color: rgba(39, 49, 27, 0.1); margin-top: 10px;">
+                <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-dim); font-weight: 600; letter-spacing: 0.5px;">
+                    <span>TARGET: JORDAN</span>
+                    <span style="color: var(--glow-green);" id="telemetry-status">● MOVING</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 4px;">
+                    <div style="font-size: 20px; font-weight: bold; color: #ffffff; letter-spacing: 1px;">ETA 14 MIN</div>
+                    <div style="font-size: 12px; color: var(--text-bright); font-weight: 600;">BATT: 83%</div>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 10px; color: var(--text-dim); border-top: 1px dashed rgba(57, 67, 45, 0.3); padding-top: 6px; margin-top: 4px;">
+                    <span>SYS_MODE: ACTIVE_PING</span>
+                    <span id="telemetry-updated">UPDATED 4s AGO</span>
+                </div>
+            </div>
+
+            <!-- Map Container Grid -->
+            <div class="map-container" style="margin-top: 5px;">
+                <img src="map-static.png" alt="Tracking Map" class="static-map-img">
+                <div id="dynamic-blip" class="friend-tracker-dot"></div>
+            </div>
+        </div>
         
 
         <div class="shortcut-hint">⌘ + ENTER TO SEND</div>
