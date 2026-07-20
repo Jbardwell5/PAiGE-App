@@ -115,6 +115,92 @@
     resize: none;
     outline: none;
 }
+        /* Integrated Scalable Vector Logo Frame */
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0;
+            margin-bottom: 10px; 
+        }
+
+        .logo-wrapper {
+            position: relative;
+            display: inline-block;
+            width: auto;
+            height: 80px;
+        }
+
+        .logo-image {
+            height: 80px;
+            width: auto;
+            display: block;
+            transition: filter 0.3s ease;
+        }
+
+        /* Perfectly pinned overlay relative to the graphic canvas matrix */
+        .antenna-matrix {
+            position: absolute;
+            top: -24px;   /* Positions elements cleanly above the base text segment */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 60px;
+            pointer-events: none;
+            overflow: visible;
+        }
+
+        /* Shared vector fill styles matching hardware defaults */
+        .i-dot {
+            fill: var(--text-bright);
+            transition: fill 0.3s ease;
+        }
+
+        .wave {
+            fill: none;
+            stroke: var(--text-bright);
+            stroke-width: 1.75px;
+            stroke-linecap: round;
+            opacity: 0.15;
+            transition: stroke 0.3s ease, opacity 0.2s ease;
+        }
+
+        /* -----------------------------------------------------------------
+           ANTENNA TRANSVERSE RADIO WAVE SYSTEM
+        -------------------------------------------------------------------- */
+        
+        /* Ambient/Idle State: Continuous rhythmic sequence */
+        .wave-inner-left  { animation: ambientWave 2.4s infinite 0.0s; }
+        .wave-inner-right { animation: ambientWave 2.4s infinite 0.3s; }
+        .wave-outer-left  { animation: ambientWave 2.4s infinite 0.6s; }
+        .wave-outer-right { animation: ambientWave 2.4s infinite 0.9s; }
+
+        @keyframes ambientWave {
+            0%   { opacity: 0.15; }
+            30%  { opacity: 0.9;  }
+            60%  { opacity: 0.15; }
+            100% { opacity: 0.15; }
+        }
+
+        /* High-Frequency Paging Hook: Accelerated sequential drive */
+        .app-container.is-paging .wave-inner-left  { animation: activeTransmission 0.6s infinite 0.0s !important; }
+        .app-container.is-paging .wave-inner-right { animation: activeTransmission 0.6s infinite 0.15s !important; }
+        .app-container.is-paging .wave-outer-left  { animation: activeTransmission 0.6s infinite 0.3s !important; }
+        .app-container.is-paging .wave-outer-right { animation: activeTransmission 0.6s infinite 0.45s !important; }
+
+        @keyframes activeTransmission {
+            0%   { opacity: 0.1; }
+            50%  { opacity: 1.0; stroke-width: 2.2px; }
+            100% { opacity: 0.1; }
+        }
+
+        /* Global Matrix Priority Override Rules */
+        .priority-mode-active .i-dot {
+            fill: var(--alert-red) !important;
+        }
+        .priority-mode-active .wave {
+            stroke: var(--alert-red) !important;
+        }
 
 /* Placeholder text color */
 textarea::placeholder {
@@ -588,8 +674,23 @@ textarea::placeholder {
             <span class="status-text">● ONLINE</span>
         </div>
         
-      <header>
-            <img src="apple-touch-logo.png" alt="PAiGE Logo" class="logo-image">
+     <header>
+            <div class="logo-wrapper">
+                <img src="apple-touch-logo.png" alt="PAiGE Logo" class="logo-image">
+                <!-- Inline calibrated vector overlay matching original radio geometry -->
+                <svg class="antenna-matrix" viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Rounded Segment i-Dot Blip -->
+                    <rect class="i-dot" x="46.5" y="44" width="7" height="7" rx="1.5" />
+                    
+                    <!-- Left Emitting Radiation Arcs -->
+                    <path class="wave wave-inner-left" d="M 40 43 A 8 8 0 0 1 40 31" />
+                    <path class="wave wave-outer-left" d="M 35 48 A 15 15 0 0 1 35 26" />
+                    
+                    <!-- Right Emitting Radiation Arcs -->
+                    <path class="wave wave-inner-right" d="M 60 31 A 8 8 0 0 1 60 43" />
+                    <path class="wave wave-outer-right" d="M 65 26 A 15 15 0 0 1 65 48" />
+                </svg>
+            </div>
         </header>
 
         <div class="input-card">
@@ -667,12 +768,16 @@ input.addEventListener('input', () => {
     }
 });
 
-    // 2. Transmit operations & Dynamic Receipts
+  // 2. Controlled Core Transmit Pipeline (COMPLETE REPLACEMENT)
     btn.addEventListener('click', (e) => {
         e.preventDefault();
         if (!input.value.trim()) return;
 
         const originalText = input.value;
+        const isPriorityMessage = toggle.checked; // Capture toggle state at exact moment of transmission
+
+        // Activate the high-frequency SVG radio wave animation layout rules
+        document.querySelector('.app-container').classList.add('is-paging');
 
         btn.disabled = true;
         btn.classList.remove('active');
@@ -680,22 +785,24 @@ input.addEventListener('input', () => {
         btn.textContent = 'PAGING...';
 
         input.value = '';
-counter.textContent = '160';
-document.querySelector('.char-count').className = 'char-count'; // <-- Add this to clear the red/amber state on clear
+        counter.textContent = '160';
+        countWrapper.className = 'char-count';
 
         setTimeout(() => {
+            // Kill the paging animation loop when successful transmission lands
+            document.querySelector('.app-container').classList.remove('is-paging');
+
             btn.classList.remove('paging');
             btn.classList.add('sent-success');
             btn.textContent = 'SENT';
 
             const timeString = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             const dateString = new Date().toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
-            
-            // Generate distinct ID to track this specific page for the fake read receipt feedback
             const uniquePageId = 'page-' + Date.now();
 
             const newCard = document.createElement('div');
-            newCard.className = 'log-card';
+            // Stamping unique priority tracking memory rule down onto structural class configurations
+            newCard.className = isPriorityMessage ? 'log-card is-priority-transmission' : 'log-card';
             newCard.style.marginTop = '15px';
             newCard.innerHTML = `
                 <div class="log-timestamp">${dateString} ${timeString}</div>
@@ -706,17 +813,11 @@ document.querySelector('.char-count').className = 'char-count'; // <-- Add this 
                 </div>
             `;
 
-            if (container) {
-                const sectionHeader = document.querySelector('.section-header');
-                if (sectionHeader && sectionHeader.nextSibling) {
-                    sectionHeader.parentNode.insertBefore(newCard, sectionHeader.nextSibling);
-                } else {
-                    container.prepend(newCard);
-                }
+            if (logHistoryContainer) {
+                logHistoryContainer.insertBefore(newCard, logHistoryContainer.firstChild);
             }
 
-            // SIMULATED FEEDBACK LOOP: 
-            // Changes the message state target from UNREAD to READ after 5 seconds to test visual notifications
+            // Asynchronous simulated read notification feedback loop
             setTimeout(() => {
                 const receiptBadge = document.getElementById(uniquePageId);
                 if (receiptBadge) {
@@ -724,7 +825,7 @@ document.querySelector('.char-count').className = 'char-count'; // <-- Add this 
                     receiptBadge.classList.remove('unread');
                     receiptBadge.classList.add('read');
                 }
-            }, 5000);
+            }, 4000);
 
             setTimeout(() => {
                 btn.classList.remove('sent-success');
