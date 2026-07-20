@@ -592,7 +592,7 @@ textarea::placeholder {
 
         <div class="input-card">
             <textarea placeholder="COMPOSE..." maxlength="160" id="message-input"></textarea>
-            <div class="char-count"><span id="char-counter">0</span> / 160</div>
+            <div class="char-count"><span id="char-counter">160</span> REMAINING</div>
             
             <div class="controls">
                 <label class="toggle-container">
@@ -634,19 +634,24 @@ textarea::placeholder {
     const btn = document.getElementById('send-btn');
     const container = document.querySelector('.log-card')?.parentNode;
 
-    // 1. Text parsing field listeners
-    input.addEventListener('input', () => {
-        const currentLength = input.value.length;
-        counter.textContent = currentLength;
+   // 1. Retro SMS Character Countdown Listener
+input.addEventListener('input', () => {
+    const maxLength = 160;
+    const currentLength = input.value.length;
+    const remaining = maxLength - currentLength;
+    
+    // Update countdown display
+    counter.textContent = remaining;
 
-        if (currentLength > 0 && !btn.classList.contains('paging') && !btn.classList.contains('sent-success')) {
-            btn.classList.add('active');
-            btn.disabled = false;
-        } else if (currentLength === 0) {
-            btn.classList.remove('active');
-            btn.disabled = true;
-        }
-    });
+    // Handle send button activation states
+    if (currentLength > 0 && !btn.classList.contains('paging') && !btn.classList.contains('sent-success')) {
+        btn.classList.add('active');
+        btn.disabled = false;
+    } else if (currentLength === 0) {
+        btn.classList.remove('active');
+        btn.disabled = true;
+    }
+});
 
     // 2. Transmit operations & Dynamic Receipts
     btn.addEventListener('click', (e) => {
@@ -661,7 +666,7 @@ textarea::placeholder {
         btn.textContent = 'PAGING...';
 
         input.value = '';
-        counter.textContent = '0';
+        counter.textContent = '160';
 
         setTimeout(() => {
             btn.classList.remove('paging');
