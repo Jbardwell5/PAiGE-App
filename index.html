@@ -681,73 +681,70 @@ input.addEventListener('input', () => {
     }
 });
 
-    // 2. Transmit operations & Dynamic Receipts
-    btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (!input.value.trim()) return;
+   // 2. Transmit operations & Dynamic Historic Receipts
+btn.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (!input.value.trim()) return;
 
-        const originalText = input.value;
+    const originalText = input.value;
+    
+    // CRITICAL: Lock down the toggle state at the exact moment of transmission
+    const isPriorityMessage = toggle.checked; 
 
-        btn.disabled = true;
-        btn.classList.remove('active');
-        btn.classList.add('paging');
-        btn.textContent = 'PAGING...';
+    btn.disabled = true;
+    btn.classList.remove('active');
+    btn.classList.add('paging');
+    btn.textContent = 'PAGING...';
 
-        input.value = '';
-counter.textContent = '160';
-document.querySelector('.char-count').className = 'char-count'; // <-- Add this to clear the red/amber state on clear
+    input.value = '';
+    counter.textContent = '160';
+    countWrapper.className = 'char-count';
+
+    setTimeout(() => {
+        btn.classList.remove('paging');
+        btn.classList.add('sent-success');
+        btn.textContent = 'SENT';
+
+        const timeString = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const dateString = new Date().toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
+        const uniquePageId = 'page-' + Date.now();
+
+        const newCard = document.createElement('div');
+        
+        // Stamping the permanent historic class if it was sent as a priority
+        newCard.className = isPriorityMessage ? 'log-card is-priority-transmission' : 'log-card';
+        newCard.style.marginTop = '15px';
+        newCard.innerHTML = `
+            <div class="log-timestamp">${dateString} ${timeString}</div>
+            <div class="log-text">${originalText}</div>
+            <div class="log-status-row">
+                <span class="delivery-status">✓ DELIVERED</span>
+                <span class="read-status unread" id="${uniquePageId}">UNREAD</span>
+            </div>
+        `;
+
+        if (logHistoryContainer) {
+            logHistoryContainer.insertBefore(newCard, logHistoryContainer.firstChild);
+        }
+
+        // Simulated asynchronous read tracking loop
+        setTimeout(() => {
+            const receiptBadge = document.getElementById(uniquePageId);
+            if (receiptBadge) {
+                receiptBadge.textContent = 'READ';
+                receiptBadge.classList.remove('unread');
+                receiptBadge.classList.add('read');
+            }
+        }, 4000);
 
         setTimeout(() => {
-            btn.classList.remove('paging');
-            btn.classList.add('sent-success');
-            btn.textContent = 'SENT';
+            btn.classList.remove('sent-success');
+            btn.textContent = 'PAGE';
+            btn.disabled = true;
+        }, 1500);
 
-            const timeString = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            const dateString = new Date().toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
-            
-            // Generate distinct ID to track this specific page for the fake read receipt feedback
-            const uniquePageId = 'page-' + Date.now();
-
-            const newCard = document.createElement('div');
-            newCard.className = 'log-card';
-            newCard.style.marginTop = '15px';
-            newCard.innerHTML = `
-                <div class="log-timestamp">${dateString} ${timeString}</div>
-                <div class="log-text">${originalText}</div>
-                <div class="log-status-row">
-                    <span class="delivery-status">✓ DELIVERED</span>
-                    <span class="read-status unread" id="${uniquePageId}">UNREAD</span>
-                </div>
-            `;
-
-            if (container) {
-                const sectionHeader = document.querySelector('.section-header');
-                if (sectionHeader && sectionHeader.nextSibling) {
-                    sectionHeader.parentNode.insertBefore(newCard, sectionHeader.nextSibling);
-                } else {
-                    container.prepend(newCard);
-                }
-            }
-
-            // SIMULATED FEEDBACK LOOP: 
-            // Changes the message state target from UNREAD to READ after 5 seconds to test visual notifications
-            setTimeout(() => {
-                const receiptBadge = document.getElementById(uniquePageId);
-                if (receiptBadge) {
-                    receiptBadge.textContent = 'READ';
-                    receiptBadge.classList.remove('unread');
-                    receiptBadge.classList.add('read');
-                }
-            }, 5000);
-
-            setTimeout(() => {
-                btn.classList.remove('sent-success');
-                btn.textContent = 'PAGE';
-                btn.disabled = true;
-            }, 1500);
-
-        }, 2000); 
-    });
+    }, 2000); 
+});
 
     // 3. Dynamic radar updates
     function simulateBlipMovement() {
