@@ -16,12 +16,12 @@
 
     <style>
         :root {
-            --bg-color: #12140e;
-            --border-color: #39432d; 
-            --glow-green: #79f82c;
-            --text-dim: #a1b58f;    
-            --text-bright: #79f82c; 
-        }
+    --bg-color: #12140e;
+    --border-color: #39432d; /* Hardened borders for better visibility */
+    --glow-green: #79f82c;
+    --text-dim: #a1b58f;    /* BUMPED: Was dim olive, now a bright, legible sage */
+    --text-bright: #79f82c; /* The ultra-bright brand green */
+}
 
         * {
             box-sizing: border-box;
@@ -42,48 +42,41 @@
             overflow-y: auto;
         }
 
+        /* Container designed to fit mobile viewport */
         .app-container {
             width: 100%;
             max-width: 400px;
             display: flex;
             flex-direction: column;
             gap: 20px;
-            padding-bottom: 40px; 
+            padding-bottom: 40px; /* Space at bottom for home indicator */
         }
 
-        /* Header Layout */
+        /* Header / Logo */
         header {
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 10px 0;
-            margin-bottom: 10px; 
-        }
-
-        /* SVG Heartbeat Pulse Animation Matrix */
-        .radio-signal-group {
-            animation: broadcastPulse 5s infinite ease-in-out;
-        }
-
-        @keyframes broadcastPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+            margin-bottom: 10px; /* Adds extra breathing room before the larger logo */
         }
         
-        /* Status Indicator */
+      /* Simplified Status Indicator */
         .status-container {
-            position: absolute; 
+            position: absolute; /* This is the anchor for the status indicator */
+            /* ... your other container styles ... */
             top: 3px;
-            right: 12px; 
-            left: auto;  
+            right: 12px; /* Forces it to the right */
+            left: auto;  /* Overrides any leftover left positioning */
             user-select: none;
+            /* Simple 8-second gentle pulse for the whole indicator */
             animation: statusPulse 8s infinite ease-in-out; 
         }
 
         .status-text {
             font-family: 'Share Tech Mono', monospace;
             font-size: 11px;
-            color: var(--text-bright);
+            color: var(--primary-glow);
             font-weight: bold;
             letter-spacing: 1.5px;
             text-shadow: 0 0 5px rgba(121, 248, 44, 0.5);
@@ -93,8 +86,14 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.4; }
         }
+        
+        .logo-image {
+            height: 125px; /* Making the logo larger */
+            width: auto;  /* Prevents any horizontal stretching */
+            display: block;
+        }
 
-        /* Message Compose Architecture */
+        /* Message Input Box */
         .input-card {
             border: 1px solid var(--border-color);
             background-color: rgba(39, 49, 27, 0.1);
@@ -106,45 +105,48 @@
         }
 
         textarea {
-            width: 100%;
-            min-height: 80px;
-            background: transparent;
-            border: none;
-            color: #ffffff; 
-            font-family: inherit;
-            font-size: 16px; 
-            resize: none;
-            outline: none;
-        }
+    width: 100%;
+    min-height: 80px;
+    background: transparent;
+    border: none;
+    color: #ffffff; /* FIXED: Pure white text guarantees visibility in daylight */
+    font-family: inherit;
+    font-size: 16px; /* BUMPED: 16px also prevents iOS from auto-zooming the screen */
+    resize: none;
+    outline: none;
+}
 
-        textarea::placeholder {
-            color: var(--text-dim); 
-            opacity: 0.8;
-        }
+/* Placeholder text color */
+textarea::placeholder {
+    color: var(--text-dim); /* Clearer, brighter placeholder */
+    opacity: 0.8;
+}
 
         .char-count {
-            font-size: 11px;
-            color: var(--text-dim); 
-            text-align: right;
-            font-weight: 600; 
-        }
+    font-size: 11px;
+    color: var(--text-dim); /* Utilizes the brighter sage color */
+    text-align: right;
+    font-weight: 600; /* Added weight to help cut through glare */
+}
 
-        .shortcut-hint {
-            color: var(--text-dim);
-            opacity: 0.9;     
-            font-size: 11px;
-            letter-spacing: 1px;
-            text-align: center;
-            margin-top: -8px;
-        }
+/* The ⌘ + ENTER TO SEND hint text */
+.shortcut-hint {
+    color: var(--text-dim);
+    opacity: 0.9;     /* Pushed up from being washed out */
+    font-size: 11px;
+    letter-spacing: 1px;
+}
 
-        @media (max-width: 480px) {
-            .shortcut-hint {
-                display: none;
-            }
-        }
+/* Recent Pages Timestamp */
+.message-card small {
+    display: block;
+    text-align: right;
+    margin-top: 10px;
+    color: var(--text-dim); /* Lifted from the old dark green */
+    font-weight: 600;
+}
 
-        /* Control Toggles & Hardware Buttons */
+        /* Controls: Toggle & Send Button */
         .controls {
             display: flex;
             justify-content: space-between;
@@ -153,6 +155,7 @@
             padding-top: 12px;
         }
 
+        /* Urgency Toggle Switch */
         .toggle-container {
             display: flex;
             align-items: center;
@@ -220,32 +223,34 @@
             color: var(--glow-green);
         }
 
-        /* Interactive Transmission Action Button */
+        /* Send Button */
         .btn-send {
             background: transparent;
             border: 1px solid var(--border-color);
-            color: rgba(121, 248, 44, 0.25); 
+            color: rgba(121, 248, 44, 0.25); /* Dimmed green when empty */
             padding: 8px 16px;
             font-family: inherit;
             font-size: 14px;
             font-weight: bold;
-            cursor: not-allowed; 
+            cursor: not-allowed; /* Shows a "no" cursor on desktop when empty */
             border-radius: 4px;
             transition: background-color 0.1s ease, border-color 0.1s ease, box-shadow 0.1s ease, color 0.1s;
-            opacity: 0.5; 
+            opacity: 0.5; /* Slightly faded out */
         }
 
+        /* The glowing style that gets triggered when there is text */
         .btn-send.active {
-            color: var(--text-bright); 
-            border-color: var(--glow-green); 
-            box-shadow: 0 0 8px rgba(121, 248, 44, 0.3); 
+            color: var(--primary-glow); /* Bright, glowing green text */
+            border-color: var(--glow-green); /* Glowing green border */
+            box-shadow: 0 0 8px rgba(121, 248, 44, 0.3); /* Subtle green outer glow */
             cursor: pointer;
-            opacity: 1; 
+            opacity: 1; /* Fully visible */
         }
         
+        /* Transmitting State (Pulsing text) */
         .btn-send.paging {
             color: var(--glow-green);
-            border-color: var(--glow-green);
+            border-color: var(--primary-glow);
             animation: transmitPulse 0.5s infinite alternate;
             cursor: wait;
         }
@@ -255,16 +260,32 @@
             100% { opacity: 1; box-shadow: 0 0 10px rgba(121, 248, 44, 0.4); }
         }
 
+        /* Sent Success State (Solid bright glow) */
         .btn-send.sent-success {
             color: #ffffff;
-            background-color: var(--glow-green);
-            border-color: var(--glow-green);
+            background-color: var(--primary-glow);
+            border-color: var(--primary-glow);
             box-shadow: 0 0 15px rgba(121, 248, 44, 0.8);
             text-shadow: none;
             opacity: 1;
         }
+        
+       .shortcut-hint {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            margin-top: -8px;
+        }
 
-        /* Transmission History Headers */
+        /* Hide the shortcut hint on mobile devices */
+        @media (max-width: 480px) {
+            .shortcut-hint {
+                display: none;
+            }
+        }
+
+        /* Transmission Log Header */
         .section-header {
             font-size: 12px;
             color: var(--text-dim);
@@ -274,6 +295,7 @@
             text-transform: uppercase;
         }
 
+        /* Message Bubble Card */
         .log-card {
             border: 1px solid var(--border-color);
             border-radius: 8px;
@@ -295,41 +317,158 @@
             line-height: 1.4;
         }
 
-        /* Core Map Elements */
+        /* Location Tracking Card */
+        .location-card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 40px; /* Push the access denied text down */
+        }
+
+        .location-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .location-title {
+            font-size: 13px;
+            letter-spacing: 1px;
+            color: var(--text-bright);
+        }
+
+        .btn-enable {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--glow-green);
+            padding: 4px 14px;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 11px;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+
+        /* Access Denied Warning */
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 8px;
+            padding: 20px 0;
+        }
+
+        .error-title {
+            color: var(--alert-red);
+            font-size: 13px;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .error-desc {
+            color: #8c443e;
+            font-size: 11px;
+            line-height: 1.4;
+            max-width: 280px;
+        }
+      /* Critical Priority State Overrides */
+.priority-mode-active {
+    --glow-green: #ff3b30;     /* Laser Crimson Red */
+    --text-bright: #ff3b30;    /* Text accents shift to red */
+    
+    /* Subtle breathing vignette on the screen edge for high urgency */
+    animation: criticalPulse 3s infinite ease-in-out;
+}
+
+/* Force the switch container itself to flash critical red when active */
+#urgency-toggle:checked + .slider {
+    background-color: #ff3b30 !important;
+    box-shadow: 0 0 12px rgba(255, 59, 48, 0.8);
+}
+
+/* Make the compose box border turn red and stand out */
+.priority-mode-active .input-card {
+    border-color: #ff3b30 !important;
+    box-shadow: inset 0 0 8px rgba(255, 59, 48, 0.2);
+}
+
+/* Dramatic breathing animation for the outer display boundary */
+@keyframes criticalPulse {
+    0% { box-shadow: inset 0 0 15px rgba(255, 59, 48, 0.1); }
+    50% { box-shadow: inset 0 0 30px rgba(255, 59, 48, 0.3); }
+    100% { box-shadow: inset 0 0 15px rgba(255, 59, 48, 0.1); }
+}
+        
+/* Force the image logo to drop color and output a pure crimson overlay */
+.priority-mode-active img[src*="apple-touch-logo"] {
+    filter: brightness(0) saturate(100%) invert(23%) sepia(97%) saturate(6011%) hue-rotate(352deg) brightness(97%) contrast(106%) !important;
+}
+      /* Clean Critical Priority State Overrides (No Animation) */
+.priority-mode-active {
+    --glow-green: #ff3b30;     /* Laser Crimson Red */
+    --text-bright: #ff3b30;    /* Text accents shift to red */
+}
+
+/* Force the switch container to flash critical red */
+#urgency-toggle:checked + .slider {
+    background-color: #ff3b30 !important;
+    box-shadow: 0 0 12px rgba(255, 59, 48, 0.8);
+}
+
+/* Make the compose box border turn red */
+.priority-mode-active .input-card {
+    border-color: #ff3b30 !important;
+    box-shadow: inset 0 0 8px rgba(255, 59, 48, 0.2);
+}
+
+/* Map Grid: Shifts green pixels to a crisp, glowing digital red */
+.priority-mode-active .static-map-img {
+    filter: brightness(0.7) contrast(1.2) sepia(1) hue-rotate(310deg) saturate(3);
+    opacity: 0.85;
+}
+
+/* Logo: Bulletproof hex-to-filter transformation for true red */
+.priority-mode-active img[src*="apple-touch-logo"] {
+    filter: brightness(0) saturate(100%) invert(23%) sepia(97%) saturate(6011%) hue-rotate(352deg) brightness(97%) contrast(106%) !important;
+}
+     /* Map Container: Optimized for real map images */
         .map-container {
             position: relative;
             width: 100%;
             height: 180px; 
             border-radius: 8px;
             overflow: hidden;
-            background-color: #0f120d; 
+            background-color: #0f120d; /* Background color behind the map */
             border: 1px solid var(--border-color);
         }
 
-        .static-map-img {
+        /* The Static Map Image: This filter stack makes standard map dark modes look premium */
+        .static-map {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            opacity: 0.75;
-            filter: brightness(0.9) contrast(1.1) sepia(1) hue-rotate(75deg) saturate(2.5);
-            transition: filter 0.3s ease;
+            object-fit: cover; /* Important: prevents stretching */
+            filter: brightness(0.65) contrast(1.1) grayscale(0.5) sepia(0.2);
         }
 
-        /* Active Radar Location Tracking System */
+        /* Premium "Blip" Tracker Dot */
         .friend-tracker-dot {
             position: absolute;
-            top: 50%; 
+            top: 50%; /* We are centering it for the demo macro view */
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 7px; 
+            width: 7px; /* Tiny, high-fidelity blip */
             height: 7px;
             background-color: var(--glow-green);
             border-radius: 50%;
             box-shadow: 0 0 10px var(--glow-green);
             z-index: 10;
-            transition: top 2.5s ease-in-out, left 2.5s ease-in-out; 
         }
 
+        /* Fast, sharp digital "Blip" animation (not a pulse) */
         .friend-tracker-dot::after {
             content: '';
             position: absolute;
@@ -340,72 +479,79 @@
             border: 1px solid var(--glow-green);
             border-radius: 50%;
             opacity: 0;
-            animation: digitalRadar 1.8s infinite linear;
+            animation: digitalBlip 1s infinite linear;
         }
 
-        @keyframes digitalRadar {
+        @keyframes digitalBlip {
             0% { transform: scale(0.1); opacity: 1; }
-            50% { opacity: 0.4; }
             100% { transform: scale(1.0); opacity: 0; }
-        }
+        }/* Map Container Setup */
+.map-container {
+    position: relative;
+    width: 100%;
+    height: 180px; 
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #0f120d; /* Deep olive-black */
+    border: 1px solid var(--border-color);
+}
 
-        /* -----------------------------------------------------------------
-           CLEAN CRITICAL PRIORITY TAKE-OVER STATE (NO BREATHING VIGNETTE)
-        -------------------------------------------------------------------- */
-        .priority-mode-active {
-            --glow-green: #ff3b30;     /* Laser Crimson Red */
-            --text-bright: #ff3b30;    /* Full interface color inversion down the tree */
-        }
+/* Hardened Terminal Green Filter Matrix */
+.static-map-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.75;
+    /* This shifts the grays into a crisp, glowing digital green hue */
+    filter: brightness(0.9) contrast(1.1) sepia(1) hue-rotate(75deg) saturate(2.5);
+}
 
-        /* Force the switch container to flash critical red */
-        #urgency-toggle:checked + .slider {
-            background-color: #ff3b30 !important;
-            box-shadow: 0 0 12px rgba(255, 59, 48, 0.8);
-        }
+/* High-Fidelity "Blip" Tracker Dot */
+.friend-tracker-dot {
+    position: absolute;
+    top: 50%; /* Initial starting position */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 7px; 
+    height: 7px;
+    background-color: var(--glow-green);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--glow-green);
+    z-index: 10;
+    transition: top 2.5s ease-in-out, left 2.5s ease-in-out; /* Smooths out the movement */
+}
 
-        /* Make the compose box border turn red */
-        .priority-mode-active .input-card {
-            border-color: #ff3b30 !important;
-            box-shadow: inset 0 0 8px rgba(255, 59, 48, 0.2);
-        }
+/* Pulsing Outer Radar Ring */
+.friend-tracker-dot::after {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: -12px;
+    width: 31px;
+    height: 31px;
+    border: 1px solid var(--glow-green);
+    border-radius: 50%;
+    opacity: 0;
+    animation: digitalRadar 1.8s infinite linear;
+}
 
-        /* Tactical Map Grid Shift */
-        .priority-mode-active .static-map-img {
-            filter: brightness(0.7) contrast(1.2) sepia(1) hue-rotate(310deg) saturate(3) !important;
-            opacity: 0.85;
+@keyframes digitalRadar {
+    0% { transform: scale(0.1); opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { transform: scale(1.0); opacity: 0; }
+}
         }
     </style>
 </head>
 <body>
 
     <div class="app-container">
-        <div class="status-container">
+       <div class="status-container">
             <span class="status-text">● ONLINE</span>
         </div>
         
-        <header>
-            <!-- Vector implementation of the PAiGE display system -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 200" class="logo-image" style="height: 125px; width: auto; display: block;">
-                <g fill="currentColor">
-                    <!-- P -->
-                    <path d="M40 50h40v40H40V50zm0-15h55v15H40V35zm55 15h15v40H95V50zM40 90h55v15H40V90zm0 15h15v45H40v-45z"/>
-                    <!-- A -->
-                    <path d="M145 50h15v40h-15V50zm0-15h55v15h-55V35zm55 15h15v40h-15V50zm-55 40h55v15h-55V90zm-15 15h15v45h-15v-45zm70 0h15v45h-15v-45z"/>
-                    <!-- i (Lower Stem) -->
-                    <path d="M250 90h15v60h-15V90z"/>
-                    <!-- G -->
-                    <path d="M310 50h15v40h-15V50zm0-15h55v15h-55V35zm-15 70h15v45h-15v-45zm15 30h55v15h-55v-15zm55-30h15v30h-15v-30zm-40-15h40v15h-40V90z"/>
-                    <!-- E -->
-                    <path d="M410 50h15v40h-15V50zm0-15h55v15h-55V35zm0 55h45v15h-45V90zm0 15h15v45h-15v-45zm15 30h55v15h-55v-15z"/>
-                    
-                    <!-- Pulsing vector transmitter element -->
-                    <g class="radio-signal-group">
-                        <rect x="250" y="60" width="15" height="15"/>
-                        <path d="M235 50h-5a30 30 0 0 1 0-40h5a25 25 0 0 0 0 40zm45 0h5a30 30 0 0 0 0-40h-5a25 25 0 0 1 0 40z"/>
-                        <path d="M220 60h-5a50 50 0 0 1 0-60h5a45 45 0 0 0 0 60zm75 0h5a50 50 0 0 0 0-60h-5a45 45 0 0 1 0 60z"/>
-                    </g>
-                </g>
-            </svg>
+      <header>
+            <img src="apple-touch-logo.png" alt="PAiGE Logo" class="logo-image">
         </header>
 
         <div class="input-card">
@@ -421,8 +567,8 @@
                     <span class="toggle-label">PRIORITY</span>
                 </label>
                 <button class="btn-send" id="send-btn" disabled>PAGE</button>
-            </div>
-        </div>
+          </div>
+        
 
         <div class="shortcut-hint">⌘ + ENTER TO SEND</div>
 
@@ -432,26 +578,32 @@
             <div class="log-text">Hi, When will you be home?</div>
         </div>
 
-        <div class="tracker-card">
-            <div class="section-header">Location Tracking</div>
-            <div class="map-container" style="margin-top: 10px;">
-                <img src="map-static.png" alt="Manhattan Tracking Map" class="static-map-img">
-                <div id="dynamic-blip" class="friend-tracker-dot"></div>
-            </div>
-        </div>
+      <!-- Pager Location Tracker - Static Map with Dynamic Blip -->
+<div class="tracker-card">
+    <div class="section-header">Location Tracking</div>
+    <div class="map-container" style="margin-top: 10px;">
+        
+        <!-- The Static Background Map -->
+        <img src="map-static.png" alt="Manhattan Tracking Map" class="static-map-img">
+        
+        <!-- The Simulated Moving Dot & Radar Rings -->
+        <div id="dynamic-blip" class="friend-tracker-dot"></div>
+        
     </div>
+</div>
 
-<script>
+ <script>
     const input = document.getElementById('message-input');
     const counter = document.getElementById('char-counter');
     const btn = document.getElementById('send-btn');
-    const container = document.querySelector('.log-card')?.parentNode;
+    const container = document.getElementById('recentPagesContainer') || document.querySelector('.log-card')?.parentNode;
 
-    // 1. Text parsing field listeners
+    // 1. Listen for typing to unlock/lock the button state
     input.addEventListener('input', () => {
         const currentLength = input.value.length;
         counter.textContent = currentLength;
 
+        // Toggle active visual states based on content
         if (currentLength > 0 && !btn.classList.contains('paging') && !btn.classList.contains('sent-success')) {
             btn.classList.add('active');
             btn.disabled = false;
@@ -461,37 +613,43 @@
         }
     });
 
-    // 2. Transmit operations
+    // 2. Handle the page submission animation and delayed history logging
     btn.addEventListener('click', (e) => {
         e.preventDefault();
         if (!input.value.trim()) return;
 
+        // Store the text in memory before clearing the input field
         const originalText = input.value;
 
+        // Freeze button and transition to transmitting state
         btn.disabled = true;
         btn.classList.remove('active');
         btn.classList.add('paging');
         btn.textContent = 'PAGING...';
 
+        // Clear input field immediately for a snappy hardware feel
         input.value = '';
         counter.textContent = '0';
 
+        // 3. Trigger success animations and POPULATE log on delay
         setTimeout(() => {
             btn.classList.remove('paging');
             btn.classList.add('sent-success');
             btn.textContent = 'SENT';
 
+            // CRUCIAL: The history card is created and injected ONLY when "SENT" lights up
             const timeString = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             const dateString = new Date().toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
             
             const newCard = document.createElement('div');
             newCard.className = 'log-card';
-            newCard.style.marginTop = '15px';
+            newCard.style.marginTop = '15px'; // Matches layout spacing
             newCard.innerHTML = `
                 <div class="log-timestamp">${dateString} ${timeString}</div>
                 <div class="log-text">${originalText}</div>
             `;
 
+            // Push new card right below the "Recent Pages" section header
             if (container) {
                 const sectionHeader = document.querySelector('.section-header');
                 if (sectionHeader && sectionHeader.nextSibling) {
@@ -501,16 +659,17 @@
                 }
             }
 
+            // 4. Return to standby default state
             setTimeout(() => {
                 btn.classList.remove('sent-success');
                 btn.textContent = 'PAGE';
                 btn.disabled = true;
             }, 1500);
 
-        }, 2000); 
+        }, 2000); // 2-second processing/transmitting illusion window
     });
 
-    // 3. Dynamic radar updates
+    // 5. Simulated tracking matrix for the static map
     function simulateBlipMovement() {
         const blip = document.getElementById('dynamic-blip');
         if (!blip) return;
@@ -527,21 +686,28 @@
         }, 4000);
     }
 
+    // Fire up the tracking loop when the document loads
     document.addEventListener('DOMContentLoaded', simulateBlipMovement);
-    const toggle = document.getElementById('urgency-toggle');
+     const toggle = document.getElementById('urgency-toggle');
 
-    // 4. Global interface class injection
+    // Handle shifting the entire interface style based on Priority state
     toggle.addEventListener('change', () => {
         if (toggle.checked) {
+            // Add the amber overlay class to the outermost app container
             document.body.classList.add('priority-mode-active');
         } else {
+            // Remove it to revert back to default terminal green
             document.body.classList.remove('priority-mode-active');
         }
     });
 
+    // Run once on load to establish initial state alignment
     if (toggle && toggle.checked) {
         document.body.classList.add('priority-mode-active');
     }
 </script>
+
+    
 </body>
 </html>
+ 
