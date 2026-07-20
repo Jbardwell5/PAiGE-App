@@ -576,6 +576,8 @@ textarea::placeholder {
     color: var(--glow-green);
     border: 1px solid rgba(121, 248, 44, 0.2);
 }
+        .char-count.warning { color: #ff9f0a !important; } /* Alert Amber at 20 characters */
+.char-count.critical { color: #ff3b30 !important; } /* Laser Crimson Red at 10 characters */
         }
     </style>
 </head>
@@ -634,7 +636,7 @@ textarea::placeholder {
     const btn = document.getElementById('send-btn');
     const container = document.querySelector('.log-card')?.parentNode;
 
-   // 1. Retro SMS Character Countdown Listener
+   // 1. Retro SMS Character Countdown Listener with Dynamic Color Inversion
 input.addEventListener('input', () => {
     const maxLength = 160;
     const currentLength = input.value.length;
@@ -642,6 +644,18 @@ input.addEventListener('input', () => {
     
     // Update countdown display
     counter.textContent = remaining;
+
+    // Get the parent container to apply color shifts
+    const countContainer = document.querySelector('.char-count');
+
+    // Evaluate structural thresholds for amber/red states
+    if (remaining <= 10) {
+        countContainer.className = 'char-count critical';
+    } else if (remaining <= 20) {
+        countContainer.className = 'char-count warning';
+    } else {
+        countContainer.className = 'char-count'; // Resets to default dim text color
+    }
 
     // Handle send button activation states
     if (currentLength > 0 && !btn.classList.contains('paging') && !btn.classList.contains('sent-success')) {
@@ -666,7 +680,8 @@ input.addEventListener('input', () => {
         btn.textContent = 'PAGING...';
 
         input.value = '';
-        counter.textContent = '160';
+counter.textContent = '160';
+document.querySelector('.char-count').className = 'char-count'; // <-- Add this to clear the red/amber state on clear
 
         setTimeout(() => {
             btn.classList.remove('paging');
