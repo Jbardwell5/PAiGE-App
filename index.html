@@ -87,11 +87,120 @@
             50% { opacity: 0.4; }
         }
         
-        .logo-image {
-            height: 125px; /* Making the logo larger */
-            width: auto;  /* Prevents any horizontal stretching */
-            display: block;
-        }
+       .logo-container{
+
+    position:relative;
+
+    display:inline-block;
+
+}
+
+.logo-image{
+
+    height:125px;
+
+    display:block;
+
+}
+        .logo-antenna{
+
+    position:absolute;
+
+    width:36px;
+    height:36px;
+
+    left:52.8%;
+    top:5px;
+
+    transform:translateX(-50%);
+
+    overflow:visible;
+
+    pointer-events:none;
+           
+    left:52.8%;
+
+     top:5px;
+
+}
+        .logo-dot{
+
+    fill:#79f82c;
+
+    filter:
+    drop-shadow(0 0 3px #79f82c)
+    drop-shadow(0 0 8px #79f82c);
+
+    animation:dotPulse 2.4s infinite;
+
+}
+
+.wave{
+
+    fill:none;
+
+    stroke:#79f82c;
+
+    stroke-width:3;
+
+    stroke-linecap:round;
+
+    opacity:.15;
+
+}
+
+.inner{
+
+    animation:wavePulse 2.4s infinite;
+
+}
+
+.outer{
+
+    animation:wavePulse 2.4s infinite .25s;
+
+}
+        @keyframes dotPulse{
+
+0%,100%{
+
+    opacity:1;
+    transform:scale(1);
+
+}
+
+50%{
+
+    opacity:.8;
+    transform:scale(1.18);
+
+}
+
+}
+
+@keyframes wavePulse{
+
+0%{
+
+    opacity:0;
+    transform:scale(.8);
+
+}
+
+25%{
+
+    opacity:1;
+
+}
+
+100%{
+
+    opacity:0;
+    transform:scale(1.25);
+
+}
+
+}
 
         /* Message Input Box */
         .input-card {
@@ -579,6 +688,15 @@ textarea::placeholder {
         .char-count.warning { color: #ff9f0a !important; } /* Alert Amber at 20 characters */
 .char-count.critical { color: #ff3b30 !important; } /* Laser Crimson Red at 10 characters */
         }
+        .wave,
+.logo-dot{
+    animation-play-state: paused;
+}
+
+.logo-antenna.transmitting .wave,
+.logo-antenna.transmitting .logo-dot{
+    animation-play-state: running;
+}
     </style>
 </head>
 <body>
@@ -588,9 +706,66 @@ textarea::placeholder {
             <span class="status-text">● ONLINE</span>
         </div>
         
-      <header>
-            <img src="apple-touch-logo.png" alt="PAiGE Logo" class="logo-image">
-        </header>
+   <header>
+
+    <div class="logo-container">
+
+        <img
+            src="apple-touch-logo.png"
+            class="logo-image"
+            alt="PAiGE Logo"
+        >
+
+        <svg
+            class="logo-antenna"
+            viewBox="0 0 100 100"
+            aria-hidden="true"
+        >
+
+            <!-- dot -->
+
+            <rect
+                x="46"
+                y="36"
+                width="8"
+                height="8"
+                rx="2"
+                class="logo-dot"
+            />
+
+            <!-- left inner -->
+
+            <path
+                d="M39 55 C33 49 33 41 39 35"
+                class="wave inner"
+            />
+
+            <!-- left outer -->
+
+            <path
+                d="M29 62 C18 50 18 34 29 22"
+                class="wave outer"
+            />
+
+            <!-- right inner -->
+
+            <path
+                d="M61 35 C67 41 67 49 61 55"
+                class="wave inner"
+            />
+
+            <!-- right outer -->
+
+            <path
+                d="M71 22 C82 34 82 50 71 62"
+                class="wave outer"
+            />
+
+        </svg>
+
+    </div>
+
+</header>
 
         <div class="input-card">
             <textarea placeholder="COMPOSE..." maxlength="160" id="message-input"></textarea>
@@ -664,6 +839,11 @@ input.addEventListener('input', () => {
     } else if (currentLength === 0) {
         btn.classList.remove('active');
         btn.disabled = true;
+    }
+    {
+    document
+    .querySelector(".logo-antenna")
+    .classList.add("transmitting");
     }
 });
 
