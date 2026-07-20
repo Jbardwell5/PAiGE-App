@@ -407,7 +407,7 @@ textarea::placeholder {
 .priority-mode-active img[src*="apple-touch-logo"] {
     filter: brightness(0) saturate(100%) invert(23%) sepia(97%) saturate(6011%) hue-rotate(352deg) brightness(97%) contrast(106%) !important;
 }
-       /* Critical Priority State Overrides */
+      /* Clean Critical Priority State Overrides (No Animation) */
 .priority-mode-active {
     --glow-green: #ff3b30;     /* Laser Crimson Red */
     --text-bright: #ff3b30;    /* Text accents shift to red */
@@ -425,11 +425,15 @@ textarea::placeholder {
     box-shadow: inset 0 0 8px rgba(255, 59, 48, 0.2);
 }
 
-/* FLIP THE MAP GRID TO CRITICAL RED */
+/* Map Grid: Shifts green pixels to a crisp, glowing digital red */
 .priority-mode-active .static-map-img {
-    /* This shifts the gray lines of your static asset into a crisp, glowing digital red */
     filter: brightness(0.7) contrast(1.2) sepia(1) hue-rotate(310deg) saturate(3);
     opacity: 0.85;
+}
+
+/* Logo: Bulletproof hex-to-filter transformation for true red */
+.priority-mode-active img[src*="apple-touch-logo"] {
+    filter: brightness(0) saturate(100%) invert(23%) sepia(97%) saturate(6011%) hue-rotate(352deg) brightness(97%) contrast(106%) !important;
 }
      /* Map Container: Optimized for real map images */
         .map-container {
