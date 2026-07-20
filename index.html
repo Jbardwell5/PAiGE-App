@@ -653,214 +653,208 @@ textarea::placeholder {
                 <div id="dynamic-blip" class="friend-tracker-dot"></div>
             </div>
         </div>
-    </div> <!-- Closes .app-container cleanly -->
-                
-<script>
-    const input = document.getElementById('message-input');
-    const counter = document.getElementById('char-counter');
-    const btn = document.getElementById('send-btn');
-    const container = document.querySelector('.log-card')?.parentNode;
+   </div> <!-- Closes .app-container cleanly -->
 
-   // 1. Retro SMS Character Countdown Listener with Dynamic Color Inversion
-input.addEventListener('input', () => {
-    const maxLength = 160;
-    const currentLength = input.value.length;
-    const remaining = maxLength - currentLength;
-    
-    // Update countdown display
-    counter.textContent = remaining;
+    <script>
+        const input = document.getElementById('message-input');
+        const counter = document.getElementById('char-counter');
+        const btn = document.getElementById('send-btn');
+        const toggle = document.getElementById('urgency-toggle');
+        const container = document.querySelector('.log-card')?.parentNode;
 
-    // Get the parent container to apply color shifts
-    const countContainer = document.querySelector('.char-count');
+        // 1. Retro SMS Character Countdown Listener with Dynamic Color Inversion
+        input.addEventListener('input', () => {
+            const maxLength = 160;
+            const currentLength = input.value.length;
+            const remaining = maxLength - currentLength;
+            
+            // Update countdown display
+            counter.textContent = remaining;
 
-    // Evaluate structural thresholds for amber/red states
-    if (remaining <= 10) {
-        countContainer.className = 'char-count critical';
-    } else if (remaining <= 20) {
-        countContainer.className = 'char-count warning';
-    } else {
-        countContainer.className = 'char-count'; // Resets to default dim text color
-    }
+            // Get the parent container to apply color shifts
+            const countContainer = document.querySelector('.char-count');
 
-    // Handle send button activation states
-    if (currentLength > 0 && !btn.classList.contains('paging') && !btn.classList.contains('sent-success')) {
-        btn.classList.add('active');
-        btn.disabled = false;
-    } else if (currentLength === 0) {
-        btn.classList.remove('active');
-        btn.disabled = true;
-    }
-});
+            // Evaluate structural thresholds for amber/red states
+            if (remaining <= 10) {
+                countContainer.className = 'char-count critical';
+            } else if (remaining <= 20) {
+                countContainer.className = 'char-count warning';
+            } else {
+                countContainer.className = 'char-count'; // Resets to default dim text color
+            }
 
- // =================================================================
-    // 2. TRANSMIT OPERATIONS & DYNAMIC RELATIVE TIMING PIPELINE (FIXED)
-    // =================================================================
-
-    // A. High-Utility Relative Time Formatting Engine
-    function getRelativeTimeString(timestamp) {
-        const now = Date.now();
-        const diff = now - timestamp;
-        
-        const second = 1000;
-        const minute = 60 * second;
-        const hour = 60 * minute;
-        const day = 24 * hour;
-
-        if (diff < second * 5) return 'JUST NOW';
-        if (diff < minute) return Math.floor(diff / second) + 's AGO';
-        if (diff < hour) return Math.floor(diff / minute) + 'm AGO';
-        
-        const dateObj = new Date(timestamp);
-        const timeStr = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        
-        if (diff < day && new Date().getDate() === dateObj.getDate()) {
-            return `TODAY AT ${timeStr}`;
-        } else if (diff < day * 2) {
-            return `YESTERDAY AT ${timeStr}`;
-        } else {
-            const options = { weekday: 'short', month: 'short', day: 'numeric' };
-            return `${dateObj.toLocaleDateString([], options).toUpperCase()} AT ${timeStr}`;
-        }
-    }
-
-    // B. Global Refresh Controller: Dynamically recalculates relative age labels
-    function refreshAllLogTimestamps() {
-        document.querySelectorAll('.log-card').forEach(card => {
-            const systemTime = card.getAttribute('data-timestamp');
-            if (systemTime) {
-                const labelTarget = card.querySelector('.log-timestamp');
-                if (labelTarget) {
-                    labelTarget.textContent = getRelativeTimeString(parseInt(systemTime, 10));
-                }
+            // Handle send button activation states
+            if (currentLength > 0 && !btn.classList.contains('paging') && !btn.classList.contains('sent-success')) {
+                btn.classList.add('active');
+                btn.disabled = false;
+            } else if (currentLength === 0) {
+                btn.classList.remove('active');
+                btn.disabled = true;
             }
         });
-    }
-    // Continuously sweep the UI logs every 5 seconds to keep relative times current
-    setInterval(refreshAllLogTimestamps, 5000);
 
-    // C. Core Transmit Trigger Pipeline
-    btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (!input.value.trim()) return;
+        // =================================================================
+        // 2. TRANSMIT OPERATIONS & DYNAMIC RELATIVE TIMING PIPELINE (FIXED)
+        // =================================================================
 
-        const originalText = input.value;
-        const isPriorityMessage = toggle.checked; // Capture toggle state at exact moment of transmission
-
-        // Activate the high-frequency SVG radio wave animation layout rules
-        const appContainer = document.querySelector('.app-container');
-        if (appContainer) {
-            appContainer.classList.add('is-paging');
-        }
-
-        btn.disabled = true;
-        btn.classList.remove('active');
-        btn.classList.add('paging');
-        btn.textContent = 'PAGING...';
-
-        input.value = '';
-        
-        // Safety Fallbacks: Safely update counter text and color class without throwing script errors
-        if (typeof counter !== 'undefined' && counter) counter.textContent = '160';
-        
-        const dynamicCountTarget = document.getElementById('char-count-wrapper') || document.querySelector('.char-count');
-        if (dynamicCountTarget) {
-            dynamicCountTarget.className = 'char-count';
-        }
-
-        setTimeout(() => {
-            // Kill the paging animation loop when successful transmission lands
-            if (appContainer) {
-                appContainer.classList.remove('is-paging');
-            }
-
-            btn.classList.remove('paging');
-            btn.classList.add('sent-success');
-            btn.textContent = 'SENT';
-
-            const exactEpochTime = Date.now();
-            const relativeLabel = getRelativeTimeString(exactEpochTime);
-            const uniquePageId = 'page-' + exactEpochTime;
-
-            const newCard = document.createElement('div');
-            // Stamping unique priority tracking memory rule down onto structural class configurations
-            newCard.className = isPriorityMessage ? 'log-card is-priority-transmission' : 'log-card';
+        // A. High-Utility Relative Time Formatting Engine
+        function getRelativeTimeString(timestamp) {
+            const now = Date.now();
+            const diff = now - timestamp;
             
-            // Critical Step: Store the immutable timestamp straight into the node attributes for the interval ticker
-            newCard.setAttribute('data-timestamp', exactEpochTime);
-            newCard.style.marginTop = '15px';
-            newCard.innerHTML = `
-                <div class="log-timestamp">${relativeLabel}</div>
-                <div class="log-text">${originalText}</div>
-                <div class="log-status-row">
-                    <span class="delivery-status">✓ DELIVERED</span>
-                    <span class="read-status unread" id="${uniquePageId}">UNREAD</span>
-                </div>
-            `;
+            const second = 1000;
+            const minute = 60 * second;
+            const hour = 60 * minute;
+            const day = 24 * hour;
 
-          // Corrected Target: Pushes the new card cleanly beneath the "RECENT PAGES" header
-            const dynamicLogContainer = document.getElementById('log-history-container') || document.querySelector('.section-header')?.nextElementSibling;
-            if (dynamicLogContainer) {
-                // If targeting the wrapper directly, insert at the top of the log list
-                if (dynamicLogContainer.id === 'log-history-container') {
-                    dynamicLogContainer.insertBefore(newCard, dynamicLogContainer.firstChild);
-                } else {
-                    // Fallback safety: places it right after the header element
-                    dynamicLogContainer.parentNode.insertBefore(newCard, dynamicLogContainer);
+            if (diff < second * 5) return 'JUST NOW';
+            if (diff < minute) return Math.floor(diff / second) + 's AGO';
+            if (diff < hour) return Math.floor(diff / minute) + 'm AGO';
+            
+            const dateObj = new Date(timestamp);
+            const timeStr = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            if (diff < day && new Date().getDate() === dateObj.getDate()) {
+                return `TODAY AT ${timeStr}`;
+            } else if (diff < day * 2) {
+                return `YESTERDAY AT ${timeStr}`;
+            } else {
+                const options = { weekday: 'short', month: 'short', day: 'numeric' };
+                return `${dateObj.toLocaleDateString([], options).toUpperCase()} AT ${timeStr}`;
+            }
+        }
+
+        // B. Global Refresh Controller: Dynamically recalculates relative age labels
+        function refreshAllLogTimestamps() {
+            document.querySelectorAll('.log-card').forEach(card => {
+                const systemTime = card.getAttribute('data-timestamp');
+                if (systemTime) {
+                    const labelTarget = card.querySelector('.log-timestamp');
+                    if (labelTarget) {
+                        labelTarget.textContent = getRelativeTimeString(parseInt(systemTime, 10));
+                    }
                 }
+            });
+        }
+        // Continuously sweep the UI logs every 5 seconds to keep relative times current
+        setInterval(refreshAllLogTimestamps, 5000);
+
+        // C. Core Transmit Trigger Pipeline
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (!input.value.trim()) return;
+
+            const originalText = input.value;
+            const isPriorityMessage = toggle.checked; // Capture toggle state at exact moment of transmission
+
+            // Activate the high-frequency SVG radio wave animation layout rules
+            const appContainer = document.querySelector('.app-container');
+            if (appContainer) {
+                appContainer.classList.add('is-paging');
             }
 
-            // Asynchronous simulated read notification feedback loop
+            btn.disabled = true;
+            btn.classList.remove('active');
+            btn.classList.add('paging');
+            btn.textContent = 'PAGING...';
+
+            input.value = '';
+            
+            // Safety Fallbacks: Safely update counter text and color class without throwing script errors
+            if (typeof counter !== 'undefined' && counter) counter.textContent = '160';
+            
+            const dynamicCountTarget = document.getElementById('char-count-wrapper') || document.querySelector('.char-count');
+            if (dynamicCountTarget) {
+                dynamicCountTarget.className = 'char-count';
+            }
+
             setTimeout(() => {
-                const receiptBadge = document.getElementById(uniquePageId);
-                if (receiptBadge) {
-                    receiptBadge.textContent = 'READ';
-                    receiptBadge.classList.remove('unread');
-                    receiptBadge.classList.add('read');
+                // Kill the paging animation loop when successful transmission lands
+                if (appContainer) {
+                    appContainer.classList.remove('is-paging');
                 }
+
+                btn.classList.remove('paging');
+                btn.classList.add('sent-success');
+                btn.textContent = 'SENT';
+
+                const exactEpochTime = Date.now();
+                const relativeLabel = getRelativeTimeString(exactEpochTime);
+                const uniquePageId = 'page-' + exactEpochTime;
+
+                const newCard = document.createElement('div');
+                // Stamping unique priority tracking memory rule down onto structural class configurations
+                newCard.className = isPriorityMessage ? 'log-card is-priority-transmission' : 'log-card';
+                
+                // Critical Step: Store the immutable timestamp straight into the node attributes for the interval ticker
+                newCard.setAttribute('data-timestamp', exactEpochTime);
+                newCard.style.marginTop = '15px';
+                newCard.innerHTML = `
+                    <div class="log-timestamp">${relativeLabel}</div>
+                    <div class="log-text">${originalText}</div>
+                    <div class="log-status-row">
+                        <span class="delivery-status">✓ DELIVERED</span>
+                        <span class="read-status unread" id="${uniquePageId}">UNREAD</span>
+                    </div>
+                `;
+
+                // Corrected Target: Pushes the new card cleanly beneath the "RECENT PAGES" header
+                const dynamicLogContainer = document.getElementById('log-history-container') || document.querySelector('.section-header')?.nextElementSibling;
+                if (dynamicLogContainer) {
+                    if (dynamicLogContainer.id === 'log-history-container') {
+                        dynamicLogContainer.insertBefore(newCard, dynamicLogContainer.firstChild);
+                    } else {
+                        dynamicLogContainer.parentNode.insertBefore(newCard, dynamicLogContainer);
+                    }
+                }
+
+                // Asynchronous simulated read notification feedback loop
+                setTimeout(() => {
+                    const receiptBadge = document.getElementById(uniquePageId);
+                    if (receiptBadge) {
+                        receiptBadge.textContent = 'READ';
+                        receiptBadge.classList.remove('unread');
+                        receiptBadge.classList.add('read');
+                    }
+                }, 4000);
+
+                setTimeout(() => {
+                    btn.classList.remove('sent-success');
+                    btn.textContent = 'PAGE';
+                    btn.disabled = true;
+                }, 1500);
+
+            }, 2000); 
+        });
+        
+        // 3. Dynamic radar updates
+        function simulateBlipMovement() {
+            const blip = document.getElementById('dynamic-blip');
+            if (!blip) return;
+
+            const minPct = 40;
+            const maxPct = 60;
+
+            setInterval(() => {
+                const randomTop = Math.floor(Math.random() * (maxPct - minPct + 1)) + minPct;
+                const randomLeft = Math.floor(Math.random() * (maxPct - minPct + 1)) + minPct;
+
+                blip.style.top = `${randomTop}%`;
+                blip.style.left = `${randomLeft}%`;
             }, 4000);
-
-            setTimeout(() => {
-                btn.classList.remove('sent-success');
-                btn.textContent = 'PAGE';
-                btn.disabled = true;
-            }, 1500);
-
-        }, 2000); 
-    });
-    
-    // 3. Dynamic radar updates
-    function simulateBlipMovement() {
-        const blip = document.getElementById('dynamic-blip');
-        if (!blip) return;
-
-        const minPct = 40;
-        const maxPct = 60;
-
-        setInterval(() => {
-            const randomTop = Math.floor(Math.random() * (maxPct - minPct + 1)) + minPct;
-            const randomLeft = Math.floor(Math.random() * (maxPct - minPct + 1)) + minPct;
-
-            blip.style.top = `${randomTop}%`;
-            blip.style.left = `${randomLeft}%`;
-        }, 4000);
-    }
-
-    document.addEventListener('DOMContentLoaded', simulateBlipMovement);
-    const toggle = document.getElementById('urgency-toggle');
-
-    // 4. Global interface class injection
-    toggle.addEventListener('change', () => {
-        if (toggle.checked) {
-            document.body.classList.add('priority-mode-active');
-        } else {
-            document.body.classList.remove('priority-mode-active');
         }
-    });
 
-  
-</script>
+        document.addEventListener('DOMContentLoaded', simulateBlipMovement);
 
-    
+        // 4. Global interface class injection
+        toggle.addEventListener('change', () => {
+            if (toggle.checked) {
+                document.body.classList.add('priority-mode-active');
+            } else {
+                document.body.classList.remove('priority-mode-active');
+            }
+        });
+    </script>
 </body>
 </html>
  
