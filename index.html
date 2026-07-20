@@ -772,10 +772,16 @@ input.addEventListener('input', () => {
                 </div>
             `;
 
-            // Robust dynamic fallback to locate recent pages area safely
-            const dynamicLogContainer = document.getElementById('log-history-container') || document.querySelector('.log-card')?.parentNode;
+          // Corrected Target: Pushes the new card cleanly beneath the "RECENT PAGES" header
+            const dynamicLogContainer = document.getElementById('log-history-container') || document.querySelector('.section-header')?.nextElementSibling;
             if (dynamicLogContainer) {
-                dynamicLogContainer.insertBefore(newCard, dynamicLogContainer.firstChild);
+                // If targeting the wrapper directly, insert at the top of the log list
+                if (dynamicLogContainer.id === 'log-history-container') {
+                    dynamicLogContainer.insertBefore(newCard, dynamicLogContainer.firstChild);
+                } else {
+                    // Fallback safety: places it right after the header element
+                    dynamicLogContainer.parentNode.insertBefore(newCard, dynamicLogContainer);
+                }
             }
 
             // Asynchronous simulated read notification feedback loop
