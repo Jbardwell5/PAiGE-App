@@ -224,26 +224,28 @@ textarea::placeholder {
 
         /* Send Button */
         .btn-send {
-            background: transparent;
+            background: rgba(39, 49, 27, 0.2);
             border: 1px solid var(--border-color);
-            color: rgba(121, 248, 44, 0.25); /* Dimmed green when empty */
+            color: rgba(121, 248, 44, 0.25); 
             padding: 8px 16px;
             font-family: inherit;
             font-size: 14px;
             font-weight: bold;
-            cursor: not-allowed; /* Shows a "no" cursor on desktop when empty */
+            cursor: not-allowed; 
             border-radius: 4px;
-            transition: background-color 0.1s ease, border-color 0.1s ease, box-shadow 0.1s ease, color 0.1s;
-            opacity: 0.5; /* Slightly faded out */
+            transition: all 0.2s ease;
+            opacity: 0.6; 
         }
 
-        /* The glowing style that gets triggered when there is text */
+        /* This rule executes when text is inside the box */
         .btn-send.active {
-            color: var(--primary-glow); /* Bright, glowing green text */
-            border-color: var(--glow-green); /* Glowing green border */
-            box-shadow: 0 0 8px rgba(121, 248, 44, 0.3); /* Subtle green outer glow */
+            background-color: rgba(121, 248, 44, 0.1) !important;
+            color: #ffffff !important; 
+            border-color: var(--glow-green) !important; 
+            box-shadow: 0 0 12px rgba(121, 248, 44, 0.5) !important; 
+            text-shadow: 0 0 4px rgba(121, 248, 44, 0.6);
             cursor: pointer;
-            opacity: 1; /* Fully visible */
+            opacity: 1 !important; 
         }
         
         /* Transmitting State (Pulsing text) */
