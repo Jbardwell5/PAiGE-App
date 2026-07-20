@@ -540,6 +540,44 @@ textarea::placeholder {
     50% { opacity: 0.4; }
     100% { transform: scale(1.0); opacity: 0; }
 }
+        /* Page Delivery & Read Receipts System */
+.log-status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px dashed rgba(57, 67, 45, 0.3);
+}
+
+.delivery-status {
+    color: var(--text-dim);
+    font-weight: 600;
+}
+
+.read-status {
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 10px;
+    transition: all 0.3s ease;
+}
+
+.read-status.unread {
+    background-color: rgba(255, 159, 10, 0.15);
+    color: #ff9f0a; /* Alert Amber */
+    border: 1px solid rgba(255, 159, 10, 0.3);
+}
+
+.read-status.read {
+    background-color: rgba(121, 248, 44, 0.1);
+    color: var(--glow-green);
+    border: 1px solid rgba(121, 248, 44, 0.2);
+}
+        .char-count.warning { color: #ff9f0a !important; } /* Alert Amber at 20 characters */
+.char-count.critical { color: #ff3b30 !important; } /* Laser Crimson Red at 10 characters */
         }
     </style>
 </head>
@@ -556,7 +594,7 @@ textarea::placeholder {
 
         <div class="input-card">
             <textarea placeholder="COMPOSE..." maxlength="160" id="message-input"></textarea>
-            <div class="char-count"><span id="char-counter">0</span> / 160</div>
+            <div class="char-count"><span id="char-counter">160</span> REMAINING</div>
             
             <div class="controls">
                 <label class="toggle-container">
@@ -592,64 +630,82 @@ textarea::placeholder {
     </div>
 </div>
 
- <script>
+<script>
     const input = document.getElementById('message-input');
     const counter = document.getElementById('char-counter');
     const btn = document.getElementById('send-btn');
-    const container = document.getElementById('recentPagesContainer') || document.querySelector('.log-card')?.parentNode;
+    const container = document.querySelector('.log-card')?.parentNode;
 
-    // 1. Listen for typing to unlock/lock the button state
-    input.addEventListener('input', () => {
-        const currentLength = input.value.length;
-        counter.textContent = currentLength;
+   // 1. Retro SMS Character Countdown Listener with Dynamic Color Inversion
+input.addEventListener('input', () => {
+    const maxLength = 160;
+    const currentLength = input.value.length;
+    const remaining = maxLength - currentLength;
+    
+    // Update countdown display
+    counter.textContent = remaining;
 
-        // Toggle active visual states based on content
-        if (currentLength > 0 && !btn.classList.contains('paging') && !btn.classList.contains('sent-success')) {
-            btn.classList.add('active');
-            btn.disabled = false;
-        } else if (currentLength === 0) {
-            btn.classList.remove('active');
-            btn.disabled = true;
-        }
-    });
+    // Get the parent container to apply color shifts
+    const countContainer = document.querySelector('.char-count');
 
-    // 2. Handle the page submission animation and delayed history logging
+    // Evaluate structural thresholds for amber/red states
+    if (remaining <= 10) {
+        countContainer.className = 'char-count critical';
+    } else if (remaining <= 20) {
+        countContainer.className = 'char-count warning';
+    } else {
+        countContainer.className = 'char-count'; // Resets to default dim text color
+    }
+
+    // Handle send button activation states
+    if (currentLength > 0 && !btn.classList.contains('paging') && !btn.classList.contains('sent-success')) {
+        btn.classList.add('active');
+        btn.disabled = false;
+    } else if (currentLength === 0) {
+        btn.classList.remove('active');
+        btn.disabled = true;
+    }
+});
+
+    // 2. Transmit operations & Dynamic Receipts
     btn.addEventListener('click', (e) => {
         e.preventDefault();
         if (!input.value.trim()) return;
 
-        // Store the text in memory before clearing the input field
         const originalText = input.value;
 
-        // Freeze button and transition to transmitting state
         btn.disabled = true;
         btn.classList.remove('active');
         btn.classList.add('paging');
         btn.textContent = 'PAGING...';
 
-        // Clear input field immediately for a snappy hardware feel
         input.value = '';
-        counter.textContent = '0';
+counter.textContent = '160';
+document.querySelector('.char-count').className = 'char-count'; // <-- Add this to clear the red/amber state on clear
 
-        // 3. Trigger success animations and POPULATE log on delay
         setTimeout(() => {
             btn.classList.remove('paging');
             btn.classList.add('sent-success');
             btn.textContent = 'SENT';
 
-            // CRUCIAL: The history card is created and injected ONLY when "SENT" lights up
             const timeString = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             const dateString = new Date().toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
             
+            // Generate distinct ID to track this specific page for the fake read receipt feedback
+            const uniquePageId = 'page-' + Date.now();
+
             const newCard = document.createElement('div');
             newCard.className = 'log-card';
-            newCard.style.marginTop = '15px'; // Matches layout spacing
+            newCard.style.marginTop = '15px';
             newCard.innerHTML = `
                 <div class="log-timestamp">${dateString} ${timeString}</div>
                 <div class="log-text">${originalText}</div>
+                <div class="log-status-row">
+                    <span class="delivery-status">✓ DELIVERED</span>
+                    <span class="read-status unread" id="${uniquePageId}">UNREAD</span>
+                </div>
             `;
 
-            // Push new card right below the "Recent Pages" section header
             if (container) {
                 const sectionHeader = document.querySelector('.section-header');
                 if (sectionHeader && sectionHeader.nextSibling) {
@@ -659,17 +715,27 @@ textarea::placeholder {
                 }
             }
 
-            // 4. Return to standby default state
+            // SIMULATED FEEDBACK LOOP: 
+            // Changes the message state target from UNREAD to READ after 5 seconds to test visual notifications
+            setTimeout(() => {
+                const receiptBadge = document.getElementById(uniquePageId);
+                if (receiptBadge) {
+                    receiptBadge.textContent = 'READ';
+                    receiptBadge.classList.remove('unread');
+                    receiptBadge.classList.add('read');
+                }
+            }, 5000);
+
             setTimeout(() => {
                 btn.classList.remove('sent-success');
                 btn.textContent = 'PAGE';
                 btn.disabled = true;
             }, 1500);
 
-        }, 2000); // 2-second processing/transmitting illusion window
+        }, 2000); 
     });
 
-    // 5. Simulated tracking matrix for the static map
+    // 3. Dynamic radar updates
     function simulateBlipMovement() {
         const blip = document.getElementById('dynamic-blip');
         if (!blip) return;
@@ -686,27 +752,27 @@ textarea::placeholder {
         }, 4000);
     }
 
-    // Fire up the tracking loop when the document loads
     document.addEventListener('DOMContentLoaded', simulateBlipMovement);
-     const toggle = document.getElementById('urgency-toggle');
+    const toggle = document.getElementById('urgency-toggle');
 
-    // Handle shifting the entire interface style based on Priority state
+    // 4. Global interface class injection
     toggle.addEventListener('change', () => {
         if (toggle.checked) {
-            // Add the amber overlay class to the outermost app container
             document.body.classList.add('priority-mode-active');
         } else {
-            // Remove it to revert back to default terminal green
             document.body.classList.remove('priority-mode-active');
         }
     });
 
-    // Run once on load to establish initial state alignment
     if (toggle && toggle.checked) {
         document.body.classList.add('priority-mode-active');
     }
 </script>
 
+    
+</body>
+</html>
+ 
     
 </body>
 </html>
