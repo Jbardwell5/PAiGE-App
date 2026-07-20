@@ -201,10 +201,9 @@ textarea::placeholder {
             border-radius: 50%;
         }
 
-        input:checked + .slider {
-            background-color: rgba(121, 248, 44, 0.2);
-            border-color: var(--glow-green);
-        }
+        #urgency-toggle:checked + .slider {
+    background-color: #ff3b30 !important;
+}
 
         input:checked + .slider:before {
             transform: translateX(22px);
@@ -599,7 +598,7 @@ textarea::placeholder {
             <div class="controls">
                 <label class="toggle-container">
                     <span class="switch">
-                        <input type="checkbox" id="urgency-toggle" checked>
+                        <input type="checkbox" id="urgency-toggle"
                         <span class="slider"></span>
                     </span>
                     <span class="toggle-label">PRIORITY</span>
@@ -841,9 +840,7 @@ input.addEventListener('input', () => {
         }
     });
 
-    if (toggle && toggle.checked) {
-        document.body.classList.add('priority-mode-active');
-    }
+  
 </script>
 
     
