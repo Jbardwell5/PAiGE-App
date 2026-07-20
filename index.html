@@ -237,10 +237,10 @@ textarea::placeholder {
             opacity: 0.6; 
         }
 
-        /* This rule executes when text is inside the box */
+      /* This rule executes when text is inside the box */
         .btn-send.active {
             background-color: rgba(121, 248, 44, 0.1) !important;
-            color: #ffffff !important; 
+            color: var(--glow-green) !important; /* Dynamically tracks theme green or priority red */
             border-color: var(--glow-green) !important; 
             box-shadow: 0 0 12px rgba(121, 248, 44, 0.5) !important; 
             text-shadow: 0 0 4px rgba(121, 248, 44, 0.6);
