@@ -667,8 +667,8 @@ input.addEventListener('input', () => {
     }
 });
 
-  // =================================================================
-    // 2. TRANSMIT OPERATIONS & DYNAMIC RELATIVE TIMING PIPELINE
+ // =================================================================
+    // 2. TRANSMIT OPERATIONS & DYNAMIC RELATIVE TIMING PIPELINE (FIXED)
     // =================================================================
 
     // A. High-Utility Relative Time Formatting Engine
@@ -733,8 +733,14 @@ input.addEventListener('input', () => {
         btn.textContent = 'PAGING...';
 
         input.value = '';
-        counter.textContent = '160';
-        countWrapper.className = 'char-count';
+        
+        // Safety Fallbacks: Safely update counter text and color class without throwing script errors
+        if (typeof counter !== 'undefined' && counter) counter.textContent = '160';
+        
+        const dynamicCountTarget = document.getElementById('char-count-wrapper') || document.querySelector('.char-count');
+        if (dynamicCountTarget) {
+            dynamicCountTarget.className = 'char-count';
+        }
 
         setTimeout(() => {
             // Kill the paging animation loop when successful transmission lands
@@ -766,8 +772,10 @@ input.addEventListener('input', () => {
                 </div>
             `;
 
-            if (logHistoryContainer) {
-                logHistoryContainer.insertBefore(newCard, logHistoryContainer.firstChild);
+            // Robust dynamic fallback to locate recent pages area safely
+            const dynamicLogContainer = document.getElementById('log-history-container') || document.querySelector('.log-card')?.parentNode;
+            if (dynamicLogContainer) {
+                dynamicLogContainer.insertBefore(newCard, dynamicLogContainer.firstChild);
             }
 
             // Asynchronous simulated read notification feedback loop
@@ -788,7 +796,7 @@ input.addEventListener('input', () => {
 
         }, 2000); 
     });
-
+    
     // 3. Dynamic radar updates
     function simulateBlipMovement() {
         const blip = document.getElementById('dynamic-blip');
