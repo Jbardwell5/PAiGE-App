@@ -297,25 +297,39 @@ textarea::placeholder {
 
         /* Message Bubble Card */
         .log-card {
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    /* Forces past logs to stay standard green, ignoring the global priority theme */
+    color: #79f82c !important; 
+}
 
-        .log-timestamp {
-            font-size: 11px;
-            color: var(--text-dim);
-            text-align: right;
-        }
+.log-text {
+    font-size: 15px;
+    line-height: 1.4;
+    color: inherit; 
+}
 
-        .log-text {
-            color: var(--text-bright);
-            font-size: 15px;
-            line-height: 1.4;
-        }
+/* -----------------------------------------------------------------
+   ISOLATED HISTORICAL RECORD OVERRIDES (Stays red forever)
+-------------------------------------------------------------------- */
+.log-card.is-priority-transmission {
+    border-color: var(--alert-red) !important;
+    color: var(--alert-red) !important;
+}
+
+.log-card.is-priority-transmission .log-text {
+    color: var(--alert-red) !important;
+}
+
+.log-card.is-priority-transmission .read-status.read {
+    background-color: rgba(255, 59, 48, 0.1);
+    color: var(--alert-red);
+    border: 1px solid rgba(255, 59, 48, 0.2);
+}
 
         /* Location Tracking Card */
         .location-card {
