@@ -667,12 +667,65 @@ input.addEventListener('input', () => {
     }
 });
 
-    // 2. Transmit operations & Dynamic Receipts
+  // =================================================================
+    // 2. TRANSMIT OPERATIONS & DYNAMIC RELATIVE TIMING PIPELINE
+    // =================================================================
+
+    // A. High-Utility Relative Time Formatting Engine
+    function getRelativeTimeString(timestamp) {
+        const now = Date.now();
+        const diff = now - timestamp;
+        
+        const second = 1000;
+        const minute = 60 * second;
+        const hour = 60 * minute;
+        const day = 24 * hour;
+
+        if (diff < second * 5) return 'JUST NOW';
+        if (diff < minute) return Math.floor(diff / second) + 's AGO';
+        if (diff < hour) return Math.floor(diff / minute) + 'm AGO';
+        
+        const dateObj = new Date(timestamp);
+        const timeStr = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        if (diff < day && new Date().getDate() === dateObj.getDate()) {
+            return `TODAY AT ${timeStr}`;
+        } else if (diff < day * 2) {
+            return `YESTERDAY AT ${timeStr}`;
+        } else {
+            const options = { weekday: 'short', month: 'short', day: 'numeric' };
+            return `${dateObj.toLocaleDateString([], options).toUpperCase()} AT ${timeStr}`;
+        }
+    }
+
+    // B. Global Refresh Controller: Dynamically recalculates relative age labels
+    function refreshAllLogTimestamps() {
+        document.querySelectorAll('.log-card').forEach(card => {
+            const systemTime = card.getAttribute('data-timestamp');
+            if (systemTime) {
+                const labelTarget = card.querySelector('.log-timestamp');
+                if (labelTarget) {
+                    labelTarget.textContent = getRelativeTimeString(parseInt(systemTime, 10));
+                }
+            }
+        });
+    }
+    // Continuously sweep the UI logs every 5 seconds to keep relative times current
+    setInterval(refreshAllLogTimestamps, 5000);
+
+    // C. Core Transmit Trigger Pipeline
     btn.addEventListener('click', (e) => {
         e.preventDefault();
         if (!input.value.trim()) return;
 
         const originalText = input.value;
+        const isPriorityMessage = toggle.checked; // Capture toggle state at exact moment of transmission
+
+        // Activate the high-frequency SVG radio wave animation layout rules
+        const appContainer = document.querySelector('.app-container');
+        if (appContainer) {
+            appContainer.classList.add('is-paging');
+        }
 
         btn.disabled = true;
         btn.classList.remove('active');
@@ -680,25 +733,32 @@ input.addEventListener('input', () => {
         btn.textContent = 'PAGING...';
 
         input.value = '';
-counter.textContent = '160';
-document.querySelector('.char-count').className = 'char-count'; // <-- Add this to clear the red/amber state on clear
+        counter.textContent = '160';
+        countWrapper.className = 'char-count';
 
         setTimeout(() => {
+            // Kill the paging animation loop when successful transmission lands
+            if (appContainer) {
+                appContainer.classList.remove('is-paging');
+            }
+
             btn.classList.remove('paging');
             btn.classList.add('sent-success');
             btn.textContent = 'SENT';
 
-            const timeString = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            const dateString = new Date().toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' });
-            
-            // Generate distinct ID to track this specific page for the fake read receipt feedback
-            const uniquePageId = 'page-' + Date.now();
+            const exactEpochTime = Date.now();
+            const relativeLabel = getRelativeTimeString(exactEpochTime);
+            const uniquePageId = 'page-' + exactEpochTime;
 
             const newCard = document.createElement('div');
-            newCard.className = 'log-card';
+            // Stamping unique priority tracking memory rule down onto structural class configurations
+            newCard.className = isPriorityMessage ? 'log-card is-priority-transmission' : 'log-card';
+            
+            // Critical Step: Store the immutable timestamp straight into the node attributes for the interval ticker
+            newCard.setAttribute('data-timestamp', exactEpochTime);
             newCard.style.marginTop = '15px';
             newCard.innerHTML = `
-                <div class="log-timestamp">${dateString} ${timeString}</div>
+                <div class="log-timestamp">${relativeLabel}</div>
                 <div class="log-text">${originalText}</div>
                 <div class="log-status-row">
                     <span class="delivery-status">✓ DELIVERED</span>
@@ -706,17 +766,11 @@ document.querySelector('.char-count').className = 'char-count'; // <-- Add this 
                 </div>
             `;
 
-            if (container) {
-                const sectionHeader = document.querySelector('.section-header');
-                if (sectionHeader && sectionHeader.nextSibling) {
-                    sectionHeader.parentNode.insertBefore(newCard, sectionHeader.nextSibling);
-                } else {
-                    container.prepend(newCard);
-                }
+            if (logHistoryContainer) {
+                logHistoryContainer.insertBefore(newCard, logHistoryContainer.firstChild);
             }
 
-            // SIMULATED FEEDBACK LOOP: 
-            // Changes the message state target from UNREAD to READ after 5 seconds to test visual notifications
+            // Asynchronous simulated read notification feedback loop
             setTimeout(() => {
                 const receiptBadge = document.getElementById(uniquePageId);
                 if (receiptBadge) {
@@ -724,7 +778,7 @@ document.querySelector('.char-count').className = 'char-count'; // <-- Add this 
                     receiptBadge.classList.remove('unread');
                     receiptBadge.classList.add('read');
                 }
-            }, 5000);
+            }, 4000);
 
             setTimeout(() => {
                 btn.classList.remove('sent-success');
