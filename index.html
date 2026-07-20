@@ -608,11 +608,11 @@ textarea::placeholder {
             </div> <!-- CLOSE CONTROLS HERE -->
         </div> <!-- CLOSE INPUT CARD HERE -->
         
-        <div class="shortcut-hint">⌘ + ENTER TO SEND</div>
+       <div class="shortcut-hint">⌘ + ENTER TO SEND</div>
 
-       <div class="section-header">recent pages</div>
+        <div class="section-header">recent pages</div>
         
-        <!-- Log History Container -->
+        <!-- Log History Container (CLEANED: Only one mockup item remains) -->
         <div id="log-history-container">
             <!-- Dynamic Past Relative Timestamp Mock Card -->
             <div class="log-card" data-timestamp="1784386800000"> 
@@ -625,18 +625,12 @@ textarea::placeholder {
             </div>
         </div>
 
-            <div class="log-card">
-                <div class="log-timestamp">JUL 18, 2026 AT 10:00 AM</div>
-                <div class="log-text">Hi, When will you be home?</div>
-            </div>
-        </div>
-
-      <!-- Pager Location Tracker -->
-        <div class="tracker-card">
+        <!-- Pager Location Tracker (FIXED: Sizing now aligns perfectly with the pages section) -->
+        <div class="tracker-card" style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
             <div class="section-header">Location Tracking</div>
             
             <!-- Telemetry High-Density Card -->
-            <div class="log-card" style="gap: 8px; background-color: rgba(39, 49, 27, 0.1); margin-top: 10px;">
+            <div class="log-card" style="gap: 8px; background-color: rgba(39, 49, 27, 0.1); width: 100%;">
                 <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-dim); font-weight: 600; letter-spacing: 0.5px;">
                     <span>SIGNAL: JORDAN</span>
                     <span style="color: var(--glow-green);" id="telemetry-status">● MOVING</span>
@@ -652,12 +646,14 @@ textarea::placeholder {
             </div>
 
             <!-- Map Container Grid -->
-            <div class="map-container" style="margin-top: 5px;">
+            <div class="map-container" style="width: 100%;">
                 <img src="map-static.png" alt="Tracking Map" class="static-map-img">
                 <div id="dynamic-blip" class="friend-tracker-dot"></div>
             </div>
         </div>
-    </div> <!-- This closes .app-container cleanly -->
+    </div> <!-- Closes .app-container cleanly -->
+
+<script>
                 
 <script>
     const input = document.getElementById('message-input');
