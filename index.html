@@ -384,26 +384,24 @@
         </div>
         
         <header>
-            <!-- Vector implementation of the PAiGE display system -->
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 200" class="logo-image" style="height: 125px; width: auto; display: block;">
-                <g fill="currentColor">
-                    <!-- P -->
-                    <path d="M40 50h40v40H40V50zm0-15h55v15H40V35zm55 15h15v40H95V50zM40 90h55v15H40V90zm0 15h15v45H40v-45z"/>
-                    <!-- A -->
-                    <path d="M145 50h15v40h-15V50zm0-15h55v15h-55V35zm55 15h15v40h-15V50zm-55 40h55v15h-55V90zm-15 15h15v45h-15v-45zm70 0h15v45h-15v-45z"/>
-                    <!-- i (Lower Stem) -->
-                    <path d="M250 90h15v60h-15V90z"/>
-                    <!-- G -->
-                    <path d="M310 50h15v40h-15V50zm0-15h55v15h-55V35zm-15 70h15v45h-15v-45zm15 30h55v15h-55v-15zm55-30h15v30h-15v-30zm-40-15h40v15h-40V90z"/>
-                    <!-- E -->
-                    <path d="M410 50h15v40h-15V50zm0-15h55v15h-55V35zm0 55h45v15h-45V90zm0 15h15v45h-15v-45zm15 30h55v15h-55v-15z"/>
-                    
-                    <!-- Pulsing vector transmitter element -->
-                    <g class="radio-signal-group">
-                        <rect x="250" y="60" width="15" height="15"/>
-                        <path d="M235 50h-5a30 30 0 0 1 0-40h5a25 25 0 0 0 0 40zm45 0h5a30 30 0 0 0 0-40h-5a25 25 0 0 1 0 40z"/>
-                        <path d="M220 60h-5a50 50 0 0 1 0-60h5a45 45 0 0 0 0 60zm75 0h5a50 50 0 0 0 0-60h-5a45 45 0 0 1 0 60z"/>
-                    </g>
+            <!-- Corrected, high-fidelity PAiGE vector display -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 90" class="logo-image" style="height: 80px; width: auto; display: block;">
+                <!-- Main Logo Text Group -->
+                <text x="160" y="70" 
+                      text-anchor="middle" 
+                      font-family="'Share Tech Mono', monospace" 
+                      font-size="68" 
+                      font-weight="bold" 
+                      fill="currentColor" 
+                      letter-spacing="6">PAiGE</text>
+                
+                <!-- Wireless Transmitter Waves aligned precisely over the lowercase 'i' -->
+                <g class="radio-signal-group" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                    <!-- Concentric radar waves -->
+                    <path d="M 148 16 A 16 16 0 0 0 148 36" opacity="0.8"/>
+                    <path d="M 172 16 A 16 16 0 0 1 172 36" opacity="0.8"/>
+                    <path d="M 141 9 A 26 26 0 0 0 141 43" opacity="0.5"/>
+                    <path d="M 179 9 A 26 26 0 0 1 179 43" opacity="0.5"/>
                 </g>
             </svg>
         </header>
