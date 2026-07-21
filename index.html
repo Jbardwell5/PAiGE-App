@@ -237,15 +237,24 @@ textarea::placeholder {
             opacity: 0.6; 
         }
 
-      /* This rule executes when text is inside the box */
+       /* Tactical Solid Hardware Key Style */
         .btn-send.active {
-            background-color: rgba(121, 248, 44, 0.1) !important;
-            color: #ffffff !important; /* Back to the clean white font you had before */
-            border-color: var(--glow-green) !important; /* Border dynamically turns red/amber with the system */
-            box-shadow: 0 0 12px var(--glow-dim) !important; /* Glow matches the current toggle color gently */
-            text-shadow: 0 0 4px rgba(255, 255, 255, 0.6);
+            background-color: #A8F101 !important; /* Solid Electric LCD Green */
+            color: #000000 !important;             /* High-contrast bold black text */
+            border: 1px solid #A8F101 !important;
+            box-shadow: 0 0 10px rgba(168, 241, 1, 0.4) !important;
+            text-shadow: none !important;          /* Clean, crisp text without glow blur */
+            font-weight: 700 !important;
             cursor: pointer;
             opacity: 1 !important; 
+        }
+
+        /* Priority Mode: Solid Hot Red Flip */
+        body.priority-mode-active .btn-send.active {
+            background-color: #FF2A2A !important; /* Solid Hot Red */
+            color: #000000 !important;             /* Keeps black text for maximum legibility */
+            border-color: #FF2A2A !important;
+            box-shadow: 0 0 10px rgba(255, 42, 42, 0.5) !important;
         }
         
         /* Transmitting State (Pulsing text) */
